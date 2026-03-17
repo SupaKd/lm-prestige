@@ -307,31 +307,74 @@
   }
 }
 
-// Section catégories
-.categories-accueil {
-  padding: 5rem 0;
+// ── Bandeau stats ─────────────────────────────────────────────────
+.bandeau-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: $couleur-fond;
+  border-bottom: 1px solid $couleur-bordure;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 3.5rem;
+    border-right: 1px solid $couleur-bordure;
+
+    &:last-child { border-right: none; }
+
+    @media (max-width: $breakpoint-md) {
+      flex: 1;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 1rem 1rem;
+      text-align: center;
+    }
+  }
+
+  &__chiffre {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: $couleur-texte;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: $couleur-texte-clair;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
 }
 
-// ── Bento grid ────────────────────────────────────────────────────
-// Layout asymétrique 3 colonnes × 2 lignes
-// Citadine et SUV prennent plus de place pour l'effet Bento
+// Section catégories — full width, zéro padding
+.categories-accueil {
+  width: 100%;
+  line-height: 0; // évite les gaps liés aux inline elements
+}
+
+// ── Bento grid full section ───────────────────────────────────────
 .bento {
   display: grid;
-  margin-top: 2rem;
-  gap: 0.75rem;
-  grid-template-columns: 2fr 1.2fr 1.2fr;
-  grid-template-rows: 280px 220px;
+  width: 100%;
+  gap: 2px;
+  background: #fff; // la couleur du gap
+  grid-template-columns: 2.2fr 1fr 1.3fr;
+  grid-template-rows: 32vh 42vh;
 
-  // Attribution des zones
   &__carte--citadine  { grid-column: 1; grid-row: 1; }
-  &__carte--berline   { grid-column: 2; grid-row: 1; }
-  &__carte--suv       { grid-column: 3; grid-row: 1 / 3; } // grande hauteur droite
+  &__carte--berline   { grid-column: 2; grid-row: 1 / 3; } // grande hauteur centre-gauche
+  &__carte--suv       { grid-column: 3; grid-row: 1; }
   &__carte--utilitaire{ grid-column: 1; grid-row: 2; }
-  &__carte--premium   { grid-column: 2; grid-row: 2; }
+  &__carte--premium   { grid-column: 3; grid-row: 2; }
 
   @media (max-width: $breakpoint-md) {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 200px 160px 160px;
+    grid-template-rows: 30vw 24vw 24vw;
 
     &__carte--citadine  { grid-column: 1 / 3; grid-row: 1; }
     &__carte--berline   { grid-column: 1;     grid-row: 2; }
@@ -342,121 +385,117 @@
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 160px 140px 140px;
+    grid-template-rows: 40vw 32vw 32vw;
   }
 }
 
 .bento__carte {
   position: relative;
-  border-radius: $rayon-bordure-lg;
+  border-radius: 0;
   overflow: hidden;
   cursor: pointer;
   border: none;
   padding: 0;
   background: $couleur-fond-sombre;
 
-  // Photo full
   .bento__photo {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.7s ease;
     display: block;
+    filter: brightness(0.5) saturate(0.9);
   }
 
   &:hover .bento__photo {
-    transform: scale(1.07);
+    transform: scale(1.1);
+    filter: brightness(0.55) saturate(1.2);
   }
 
-  // Gradient sombre du bas vers le haut
+  // Overlay accent — flash bleu en mix-blend-mode
+  // Overlay accent au hover
   .bento__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.15) 50%,
-      transparent 100%
-    );
-    transition: opacity 0.3s;
+    background: $couleur-accent;
+    mix-blend-mode: color;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
   }
 
   &:hover .bento__overlay {
-    opacity: 1.15; // légère intensification au hover
+    opacity: 0.45;
   }
 
-  // Contenu en bas à gauche
+
+  // Contenu centré au milieu — au-dessus des overlays
   .bento__contenu {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.1rem 1.25rem;
+    inset: 0;
     display: flex;
-    align-items: flex-end;
-    gap: 0.6rem;
-    transform: translateY(4px);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    @media (max-width: $breakpoint-md) {
-      padding: 0.65rem 0.85rem;
-      gap: 0.35rem;
-    }
-
-    @media (max-width: 480px) {
-      padding: 0.5rem 0.65rem;
-    }
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &:hover .bento__contenu {
-    transform: translateY(0);
+    transform: scale(1.06);
   }
 
   .bento__icone {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     line-height: 1;
-    flex-shrink: 0;
-    margin-bottom: 2px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    @media (max-width: $breakpoint-md) { font-size: 1rem; }
-    @media (max-width: 480px)          { display: none; }
+    @media (max-width: $breakpoint-md) { font-size: 1.3rem; }
+    @media (max-width: 480px)          { font-size: 1.1rem; }
+  }
+
+  &:hover .bento__icone {
+    transform: translateY(-4px) scale(1.15);
   }
 
   .bento__nom {
-    font-size: 1.05rem;
+    font-size: clamp(1rem, 2vw, 1.4rem);
     font-weight: 700;
     color: $couleur-blanc;
     letter-spacing: -0.02em;
     line-height: 1;
-    flex: 1;
-    text-align: left;
+    text-align: center;
+    transition: letter-spacing 0.4s ease;
+  }
 
-    @media (max-width: $breakpoint-md) { font-size: 0.82rem; }
-    @media (max-width: 480px)          { font-size: 0.75rem; }
+  &:hover .bento__nom {
+    letter-spacing: 0.06em;
   }
 
   .bento__nb {
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba($couleur-blanc, 0.65);
+    color: rgba($couleur-blanc, 0.75);
     background-color: rgba($couleur-blanc, 0.12);
     backdrop-filter: blur(6px);
-    border: 1px solid rgba($couleur-blanc, 0.15);
-    padding: 0.18rem 0.6rem;
+    border: 1px solid rgba($couleur-blanc, 0.2);
+    padding: 0.2rem 0.7rem;
     border-radius: $rayon-pill;
     white-space: nowrap;
-    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
 
-    @media (max-width: $breakpoint-md) {
-      font-size: 0.65rem;
-      padding: 0.12rem 0.45rem;
-    }
+    @media (max-width: 480px) { display: none; }
+  }
 
-    @media (max-width: 480px) {
-      display: none;
-    }
+  &:hover .bento__nb {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   // Liseré accent au hover en bas

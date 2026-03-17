@@ -1,20 +1,76 @@
+// Header catalogue — grande card full width
+.catalogue__header {
+  background: linear-gradient(
+    135deg,
+    #191c1f 0%,
+    #1e2329 60%,
+    rgba(0, 117, 235, 0.15) 100%
+  );
+  border: 1.5px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+    0 24px 60px rgba(0, 0, 0, 0.22);
+  padding: 3rem 0;
+  margin: 2.5rem;
+  border-radius: 28px;
+  opacity: 0;
+  transform: translateY(-16px);
+  transition:
+    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.catalogue__header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+.catalogue__header-titre {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: $couleur-blanc;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+
+  span {
+    color: $couleur-accent;
+  }
+}
+
+.catalogue__header-sous-titre {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+}
+
+.catalogue__header-droite {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+
+  @media (max-width: $breakpoint-md) {
+    align-items: flex-start;
+  }
+}
+
 // Catalogue
 .catalogue {
-  padding: 3rem 0 5rem;
-
-  // Entête — slide-down au montage
-  &__entete {
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    transform: translateY(-16px);
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &--visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  padding: 0 0 5rem;
 
   &__filtres {
     display: flex;
@@ -33,7 +89,8 @@
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
-    transition: border-color 0.18s, color 0.18s, background-color 0.18s, transform 0.18s;
+    transition: border-color 0.18s, color 0.18s, background-color 0.18s,
+      transform 0.18s;
     font-family: $police-principale;
 
     &:hover {
@@ -70,8 +127,12 @@
 
   &__grille {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__vide {
@@ -102,8 +163,12 @@
 
 // Keyframes shimmer
 @keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position: 600px 0; }
+  0% {
+    background-position: -600px 0;
+  }
+  100% {
+    background-position: 600px 0;
+  }
 }
 
 // Carte véhicule
@@ -112,15 +177,15 @@
   border-radius: $rayon-bordure-lg;
   overflow: hidden;
   border: 1.5px solid $couleur-bordure;
-  transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s, box-shadow 0.25s,
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse; // photo à droite, texte à gauche
   cursor: pointer;
 
   &:hover {
     border-color: darken($couleur-bordure, 6%);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
   }
 
   &--indisponible {
@@ -130,7 +195,8 @@
 
   &__image {
     position: relative;
-    height: 200px;
+    width: 220px;
+    flex-shrink: 0;
     overflow: hidden;
     background-color: $couleur-fond-alt;
 
@@ -139,6 +205,10 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+    }
+
+    @media (max-width: 480px) {
+      width: 130px;
     }
   }
 
@@ -164,7 +234,11 @@
   &__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55) 0%,
+      transparent 55%
+    );
     display: flex;
     align-items: flex-end;
     justify-content: center;

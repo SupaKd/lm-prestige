@@ -22,7 +22,7 @@ function Catalogue() {
   useEffect(() => {
     const el = enteteRef.current
     if (!el) return
-    requestAnimationFrame(() => el.classList.add('catalogue__entete--visible'))
+    requestAnimationFrame(() => el.classList.add('catalogue__header--visible'))
   }, [])
 
   const vehiculesFiltres = categorieActive === 'tous'
@@ -38,35 +38,41 @@ function Catalogue() {
 
   return (
     <main className="page">
+      {/* Header catalogue — full width */}
+      <div className="catalogue__header" ref={enteteRef}>
+        <div className="conteneur">
+          <div className="catalogue__header-inner">
+            <div className="catalogue__header-texte">
+              <h1 className="catalogue__header-titre">
+                Notre <span>catalogue</span>
+              </h1>
+              <p className="catalogue__header-sous-titre">
+                Sélectionnez votre véhicule et réservez en quelques minutes.
+              </p>
+            </div>
+            <div className="catalogue__header-droite">
+              <div className="catalogue__filtres">
+                <SlidersHorizontal size={15} style={{ color: '#a8adb0', flexShrink: 0 }} />
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    className={`catalogue__filtre-btn${categorieActive === cat.id ? ' catalogue__filtre-btn--actif' : ''}`}
+                    onClick={() => changerCategorie(cat.id)}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+              <p className="catalogue__resultat">
+                {vehiculesFiltres.length} véhicule{vehiculesFiltres.length > 1 ? 's' : ''} trouvé{vehiculesFiltres.length > 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="conteneur">
         <section className="catalogue">
-          {/* En-tête */}
-          <div className="catalogue__entete" ref={enteteRef}>
-            <h1 className="titre-section">
-              Notre <span>catalogue</span>
-            </h1>
-            <p className="sous-titre-section">
-              Sélectionnez votre véhicule et réservez en quelques minutes.
-            </p>
-
-            {/* Filtres */}
-            <div className="catalogue__filtres">
-              <SlidersHorizontal size={15} style={{ color: '#a8adb0', flexShrink: 0 }} />
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  className={`catalogue__filtre-btn${categorieActive === cat.id ? ' catalogue__filtre-btn--actif' : ''}`}
-                  onClick={() => changerCategorie(cat.id)}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-
-            <p className="catalogue__resultat">
-              {vehiculesFiltres.length} véhicule{vehiculesFiltres.length > 1 ? 's' : ''} trouvé{vehiculesFiltres.length > 1 ? 's' : ''}
-            </p>
-          </div>
 
           {/* Grille — key force le re-render pour le stagger */}
           <div className="catalogue__grille" key={grilleCle}>
