@@ -1,0 +1,91 @@
+// Footer — fond noir dense, sobre
+.footer {
+  background-color: $couleur-fond-sombre;
+  color: rgba($couleur-blanc, 0.55);
+  padding: 3.5rem 0 2rem;
+  margin-top: 5rem;
+  border-top: 1px solid rgba($couleur-blanc, 0.06);
+
+  &__grille {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $couleur-blanc;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.03em;
+
+    span {
+      color: $couleur-accent;
+    }
+  }
+
+  &__description {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  &__titre-col {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba($couleur-blanc, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  &__liste {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__lien {
+    font-size: 0.88rem;
+    transition: color 0.15s;
+    cursor: pointer;
+
+    &:hover {
+      color: $couleur-blanc;
+    }
+  }
+
+  &__bas {
+    border-top: 1px solid rgba($couleur-blanc, 0.07);
+    padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+  }
+
+  &__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  &__contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

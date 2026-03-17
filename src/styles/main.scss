@@ -1,0 +1,181 @@
+// Variables — thème Revolut-inspired
+// Fond blanc pur, noir très dense, bleu électrique, UI épurée
+$couleur-primaire: #191c1f;        // noir Revolut (quasi-noir)
+$couleur-accent: #0075EB;          // bleu électrique Revolut
+$couleur-accent-hover: #005ec4;
+$couleur-accent-light: rgba(0, 117, 235, 0.08);
+$couleur-fond: #ffffff;            // blanc pur
+$couleur-fond-alt: #f7f7f8;        // gris très clair (surfaces secondaires)
+$couleur-fond-sombre: #191c1f;
+$couleur-texte: #191c1f;
+$couleur-texte-clair: #72777a;
+$couleur-texte-subtil: #a8adb0;
+$couleur-blanc: #ffffff;
+$couleur-bordure: #e8eaed;
+$couleur-succes: #00b386;
+$couleur-warning: #f5a623;
+
+$police-principale: 'Inter', sans-serif;
+$rayon-bordure: 12px;
+$rayon-bordure-lg: 20px;
+$rayon-pill: 50px;
+$ombre: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+$ombre-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Reset & base
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: $police-principale;
+  color: $couleur-texte;
+  background-color: $couleur-fond;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+// Conteneur global
+.conteneur {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+// Boutons — style pill Revolut
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: $rayon-pill;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
+  font-family: $police-principale;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+
+  &--primaire {
+    background-color: $couleur-accent;
+    color: $couleur-blanc;
+
+    &:hover {
+      background-color: $couleur-accent-hover;
+    }
+  }
+
+  &--secondaire {
+    background-color: $couleur-fond-alt;
+    color: $couleur-texte;
+    border: none;
+
+    &:hover {
+      background-color: darken($couleur-fond-alt, 3%);
+    }
+  }
+
+  &--blanc {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: $couleur-blanc;
+    backdrop-filter: blur(4px);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &--grand {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.95rem;
+  }
+}
+
+// Badge disponibilité — pill sobre
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: $rayon-pill;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+
+  &--disponible {
+    background-color: rgba($couleur-succes, 0.1);
+    color: $couleur-succes;
+  }
+
+  &--indisponible {
+    background-color: rgba(#e5484d, 0.1);
+    color: #e5484d;
+  }
+}
+
+// Titres de section
+.titre-section {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $couleur-texte;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+
+  span {
+    color: $couleur-accent;
+  }
+}
+
+.sous-titre-section {
+  color: $couleur-texte-clair;
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+// Chargement page
+.page {
+  min-height: 100vh;
+}
+
+// Imports des composants
+@import 'partials/navbar';
+@import 'partials/footer';
+@import 'partials/hero';
+@import 'partials/catalogue';
+@import 'partials/fiche-vehicule';
+@import 'partials/calendrier';
+@import 'partials/reservation';
+@import 'partials/recapitulatif';
+@import 'partials/galerie';
+@import 'partials/toast';
+@import 'partials/not-found';
+@import 'partials/widget';

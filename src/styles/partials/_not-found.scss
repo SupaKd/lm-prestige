@@ -1,0 +1,86 @@
+// Page 404
+
+.not-found {
+  // Entrée
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &__inner {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+
+  // "4 🚗 4"
+  &__chiffre {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+
+    span {
+      font-size: 7rem;
+      font-weight: 700;
+      color: $couleur-texte;
+      letter-spacing: -0.06em;
+      line-height: 1;
+
+      @media (max-width: $breakpoint-md) { font-size: 4.5rem; }
+    }
+  }
+
+  &__roue {
+    color: $couleur-accent;
+    animation: rouleVoiture 3s linear infinite;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: $breakpoint-md) {
+      svg { width: 36px; height: 36px; }
+    }
+  }
+
+  &__titre {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.85rem;
+
+    @media (max-width: $breakpoint-md) { font-size: 1.35rem; }
+  }
+
+  &__texte {
+    color: $couleur-texte-clair;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@keyframes rouleVoiture {
+  0%   { transform: rotate(0deg) translateY(0); }
+  25%  { transform: rotate(-8deg) translateY(-4px); }
+  50%  { transform: rotate(0deg) translateY(0); }
+  75%  { transform: rotate(8deg) translateY(-4px); }
+  100% { transform: rotate(0deg) translateY(0); }
+}

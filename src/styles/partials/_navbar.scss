@@ -1,0 +1,144 @@
+// Navbar
+// — transition hauteur/blur au scroll
+// — underline animé sur lien actif
+// — drawer mobile avec slide-down
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba($couleur-blanc, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+
+  // État scrolled : bordure + ombre légère
+  &--scrolled {
+    background-color: rgba($couleur-blanc, 0.96);
+    border-bottom-color: $couleur-bordure;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+
+    .navbar__inner {
+      height: 56px;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    transition: height 0.3s ease;
+  }
+
+  &__logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    letter-spacing: -0.04em;
+    transition: opacity 0.2s;
+
+    span { color: $couleur-accent; }
+
+    &:hover { opacity: 0.75; }
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+
+    @media (max-width: $breakpoint-md) { display: none; }
+  }
+
+  // Lien avec underline animé par pseudo-élément
+  &__lien {
+    position: relative;
+    color: $couleur-texte-clair;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: $rayon-pill;
+    transition: color 0.2s;
+
+    span {
+      position: relative;
+
+      // Underline animé
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: $couleur-accent;
+        border-radius: 2px;
+        transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+
+    &:hover {
+      color: $couleur-texte;
+
+      span::after { width: 100%; }
+    }
+
+    &.actif {
+      color: $couleur-texte;
+      font-weight: 600;
+
+      span::after { width: 100%; }
+    }
+  }
+
+  &__cta {
+    @media (max-width: $breakpoint-md) { display: none; }
+  }
+
+  &__menu-mobile {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $couleur-texte;
+    padding: 0.4rem;
+    border-radius: $rayon-bordure;
+    transition: background 0.15s;
+
+    &:hover { background-color: $couleur-fond-alt; }
+
+    @media (max-width: $breakpoint-md) { display: flex; }
+  }
+
+  // Drawer mobile — slide-down + fade
+  &__mobile-drawer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease;
+    border-top: 1px solid transparent;
+
+    &--ouvert {
+      max-height: 300px;
+      opacity: 1;
+      border-top-color: $couleur-bordure;
+    }
+  }
+
+  &__mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 0 1.25rem;
+
+    .navbar__lien {
+      font-size: 1rem;
+      padding: 0.6rem 0.5rem;
+      border-radius: $rayon-bordure;
+
+      &:hover { background-color: $couleur-fond-alt; }
+    }
+  }
+}

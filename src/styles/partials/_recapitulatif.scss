@@ -1,0 +1,223 @@
+// Récapitulatif
+// — confetti au chargement
+// — blocs qui entrent en cascade
+// — lignes détail en stagger
+// — checkmark pulsé
+
+@keyframes confettiTombe {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes pulsCheck {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.12); }
+}
+
+@keyframes ligneEntree {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+// Confetti
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+
+  &__particule {
+    position: absolute;
+    top: -10px;
+    border-radius: 50%;
+    animation: confettiTombe linear both;
+  }
+}
+
+.recapitulatif {
+  padding: 4rem 0 6rem;
+  position: relative;
+
+  &__wrapper {
+    max-width: 660px;
+    margin: 0 auto;
+  }
+
+  // Blocs — entrent en cascade via --bd (delay)
+  &__bloc {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1) var(--bd, 0s),
+                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) var(--bd, 0s);
+    margin-bottom: 1.25rem;
+  }
+
+  &__wrapper--visible &__bloc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // Confirmation
+  &__confirmation {
+    text-align: center;
+    padding: 3rem 2rem 2.5rem;
+    background-color: $couleur-blanc;
+    border-radius: $rayon-bordure-lg;
+    border: 1.5px solid $couleur-bordure;
+  }
+
+  &__icone {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: rgba($couleur-succes, 0.08);
+    color: $couleur-succes;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    animation: pulsCheck 1.8s ease-in-out 0.5s 3;
+  }
+
+  &__titre {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.03em;
+  }
+
+  &__message {
+    color: $couleur-texte-clair;
+    font-size: 0.93rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+
+    strong { color: $couleur-texte; }
+  }
+
+  &__ref {
+    display: inline-block;
+    background-color: $couleur-fond-alt;
+    border: 1.5px solid $couleur-bordure;
+    border-radius: $rayon-pill;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $couleur-texte;
+    letter-spacing: 0.02em;
+
+    span { color: $couleur-accent; }
+  }
+
+  // Détails
+  &__details {
+    background-color: $couleur-blanc;
+    border-radius: $rayon-bordure-lg;
+    border: 1.5px solid $couleur-bordure;
+    overflow: hidden;
+  }
+
+  &__details-titre {
+    background-color: $couleur-fond-alt;
+    color: $couleur-texte-clair;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1.5px solid $couleur-bordure;
+  }
+
+  &__details-corps {
+    padding: 0.25rem 1.5rem;
+  }
+
+  // Lignes en stagger via --li
+  &__detail-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid $couleur-bordure;
+    font-size: 0.87rem;
+
+    &:last-child { border-bottom: none; }
+
+    .detail-label {
+      color: $couleur-texte-clair;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .detail-valeur {
+      font-weight: 600;
+      color: $couleur-texte;
+      text-align: right;
+      max-width: 55%;
+    }
+
+    &--anime {
+      opacity: 0;
+      animation: none;
+    }
+  }
+
+  &__wrapper--visible &__detail-ligne--anime {
+    animation: ligneEntree 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(0.4s + var(--li) * 0.055s);
+  }
+
+  &__total-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1.1rem 1.5rem;
+    background-color: $couleur-fond-alt;
+    border-top: 1.5px solid $couleur-bordure;
+
+    .total-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: $couleur-texte;
+    }
+
+    .total-montant {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: $couleur-texte;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  // Note
+  &__note {
+    background-color: rgba($couleur-warning, 0.07);
+    border: 1.5px solid rgba($couleur-warning, 0.22);
+    border-radius: $rayon-bordure;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.84rem;
+    color: #7a5a00;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .btn {
+      transition: background 0.15s, transform 0.2s;
+
+      &:hover { transform: translateY(-2px); }
+      &:active { transform: translateY(0); }
+    }
+  }
+}

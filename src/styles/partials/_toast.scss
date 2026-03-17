@@ -1,0 +1,89 @@
+// Toast notifications — coin bas droite
+
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+  width: 320px;
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    bottom: 1rem;
+  }
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border-radius: $rayon-bordure;
+  background-color: $couleur-texte;
+  color: $couleur-blanc;
+  font-size: 0.87rem;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  pointer-events: all;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  // Animation entrée / sortie
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &--visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  // Variante succès
+  &--succes {
+    background-color: $couleur-succes;
+
+    .toast__icone { color: rgba(255, 255, 255, 0.9); }
+  }
+
+  // Variante erreur
+  &--erreur {
+    background-color: #d93025;
+  }
+
+  // Variante info (défaut)
+  &--info {
+    background-color: $couleur-texte;
+  }
+
+  &__icone {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  &__message {
+    flex: 1;
+    color: $couleur-blanc;
+  }
+
+  &__fermer {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 1px;
+    transition: color 0.15s;
+
+    &:hover { color: $couleur-blanc; }
+  }
+}

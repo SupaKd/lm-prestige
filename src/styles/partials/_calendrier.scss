@@ -1,0 +1,278 @@
+// Calendrier de sélection de plage de dates
+// Style Revolut : fond blanc, plage bleue, pill pour départ/retour
+
+.calendrier {
+  width: 100%;
+
+  // Instruction contextuelle
+  &__instruction {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: $couleur-texte-clair;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.85rem;
+    background-color: $couleur-fond-alt;
+    border-radius: $rayon-pill;
+    display: inline-block;
+    animation: fadeSlideDown 0.2s ease;
+  }
+
+  // Pills résumé départ / retour
+  &__resume-dates {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__date-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: $rayon-bordure;
+    border: 1.5px solid $couleur-bordure;
+    background-color: $couleur-fond-alt;
+    min-width: 90px;
+    transition: border-color 0.2s, background-color 0.2s;
+
+    &--actif {
+      border-color: $couleur-accent;
+      background-color: rgba($couleur-accent, 0.05);
+    }
+  }
+
+  &__date-pill-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: $couleur-texte-subtil;
+  }
+
+  &__date-pill-valeur {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    letter-spacing: -0.02em;
+  }
+
+  &__date-separateur {
+    font-size: 1rem;
+    color: $couleur-texte-subtil;
+    font-weight: 300;
+  }
+
+  &__nb-jours {
+    padding: 0.4rem 0.85rem;
+    border-radius: $rayon-pill;
+    background-color: rgba($couleur-accent, 0.1);
+    color: $couleur-accent;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    animation: fadeSlideDown 0.2s ease;
+  }
+
+  // Barre de navigation mois
+  &__nav {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__nav-titre {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    letter-spacing: -0.01em;
+    margin-left: 0.5rem;
+  }
+
+  &__nav-spacer {
+    flex: 1;
+  }
+
+  &__nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid $couleur-bordure;
+    background-color: $couleur-blanc;
+    color: $couleur-texte;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, transform 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: $couleur-fond-alt;
+      border-color: darken($couleur-bordure, 8%);
+      transform: scale(1.08);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  // Un seul mois (mobile)
+  &__simple {
+    width: 100%;
+  }
+
+  // Deux mois côte à côte (desktop)
+  &__double {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  // Hint swipe mobile
+  &__hint-swipe {
+    text-align: center;
+    font-size: 0.72rem;
+    color: $couleur-texte-subtil;
+    margin-top: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  // Un mois
+  &__mois {
+    padding: 0 0.5rem;
+
+    .calendrier__double &:first-child {
+      border-right: 1px solid $couleur-bordure;
+      padding-right: 1.25rem;
+    }
+
+    .calendrier__double &:last-child {
+      padding-left: 1.25rem;
+    }
+
+    // Dans le mode simple (mobile), le titre est masqué
+    // car il est déjà dans la barre nav
+    .calendrier__simple & .calendrier__mois-titre {
+      display: none;
+    }
+  }
+
+  &__mois-titre {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  // Grille 7 colonnes
+  &__grille-jours {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  &__entete-jour {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: $couleur-texte-subtil;
+    text-align: center;
+    padding: 0.3rem 0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  // Cellule jour
+  &__jour {
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    border-radius: $rayon-bordure;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: $couleur-texte;
+    cursor: pointer;
+    font-family: $police-principale;
+    transition: background-color 0.1s, color 0.1s, border-radius 0.1s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover:not(:disabled):not(.calendrier__jour--debut):not(.calendrier__jour--fin) {
+      background-color: $couleur-fond-alt;
+    }
+
+    // Passé
+    &--passe {
+      color: $couleur-texte-subtil;
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    // Dans la plage sélectionnée — fond bleu très clair, coins plats
+    &--dans-plage {
+      background-color: rgba($couleur-accent, 0.1);
+      color: $couleur-accent;
+      border-radius: 0;
+      font-weight: 600;
+    }
+
+    // Jour de départ — fond bleu plein, coins gauches arrondis
+    &--debut {
+      background-color: $couleur-accent;
+      color: $couleur-blanc;
+      border-radius: $rayon-bordure 0 0 $rayon-bordure;
+      font-weight: 700;
+      z-index: 1;
+
+      &:hover { background-color: $couleur-accent-hover; }
+    }
+
+    // Jour de fin — fond bleu plein, coins droits arrondis
+    &--fin {
+      background-color: $couleur-accent;
+      color: $couleur-blanc;
+      border-radius: 0 $rayon-bordure $rayon-bordure 0;
+      font-weight: 700;
+      z-index: 1;
+
+      &:hover { background-color: $couleur-accent-hover; }
+    }
+
+    // Cas particulier : départ = fin (même jour)
+    &--debut#{&}--fin {
+      border-radius: $rayon-bordure;
+    }
+
+    // Hover sur la plage en cours de sélection
+    &--survol {
+      background-color: $couleur-accent;
+      color: $couleur-blanc;
+      border-radius: 0 $rayon-bordure $rayon-bordure 0;
+      font-weight: 700;
+      opacity: 0.75;
+    }
+  }
+
+  // Bouton reset
+  &__reset {
+    margin-top: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    color: $couleur-texte-clair;
+    cursor: pointer;
+    font-family: $police-principale;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+    padding: 0;
+
+    &:hover { color: $couleur-texte; }
+  }
+}

@@ -1,0 +1,313 @@
+// Keyframes fiche
+@keyframes specEntree {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes optionEntree {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+// Fiche véhicule
+.fiche-vehicule {
+  padding: 2.5rem 0 5rem;
+
+  &__retour {
+    margin-bottom: 2rem;
+  }
+
+  &__grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  // Chaque bloc (galerie + infos) — fade + slide-up à l'entrée
+  &__bloc {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s),
+                transform 0.55s cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s);
+  }
+
+  &--visible &__bloc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // Galerie
+  &__galerie {
+    position: sticky;
+    top: 80px;
+
+    @media (max-width: $breakpoint-lg) {
+      position: static;
+    }
+  }
+
+  &__image-principale {
+    border-radius: $rayon-bordure-lg;
+    overflow: hidden;
+    height: 380px;
+    border: 1.5px solid $couleur-bordure;
+    background-color: $couleur-fond-alt;
+    cursor: zoom-in;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover img {
+      transform: scale(1.04);
+    }
+  }
+
+  // Hint zoom — apparaît au hover
+  &__zoom-hint {
+    position: absolute;
+    bottom: 0.85rem;
+    right: 0.85rem;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: $couleur-blanc;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.3rem 0.7rem;
+    border-radius: $rayon-pill;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+
+  &__image-principale:hover &__zoom-hint {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // Modal zoom
+  &__zoom-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.88);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+    animation: fadeInModal 0.2s ease;
+  }
+
+  &__zoom-modal-inner {
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: $rayon-bordure-lg;
+    overflow: hidden;
+    cursor: default;
+    animation: scaleInModal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  &__zoom-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.5);
+    color: $couleur-blanc;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    z-index: 1;
+
+    &:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+  }
+
+  // Infos texte
+  &__categorie {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: $couleur-accent;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  &__nom {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    margin-bottom: 1rem;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  &__dispo {
+    margin-bottom: 1.75rem;
+  }
+
+  &__prix-bloc {
+    background-color: $couleur-fond-alt;
+    border-radius: $rayon-bordure;
+    padding: 1rem 1.3rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    border: 1.5px solid $couleur-bordure;
+  }
+
+  &__prix {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $couleur-texte;
+    letter-spacing: -0.04em;
+  }
+
+  &__prix-label {
+    font-size: 0.85rem;
+    color: $couleur-texte-clair;
+  }
+
+  &__description {
+    color: $couleur-texte-clair;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 0.93rem;
+  }
+
+  &__section-titre {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $couleur-texte-subtil;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 0.85rem;
+  }
+
+  // Specs — apparaissent en cascade quand la page est visible
+  &__specs-grille {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+
+  &__spec-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.87rem;
+    color: $couleur-texte;
+    background-color: $couleur-fond-alt;
+    padding: 0.6rem 0.9rem;
+    border-radius: $rayon-bordure;
+    font-weight: 500;
+    border: 1.5px solid $couleur-bordure;
+    transition: border-color 0.2s, transform 0.2s;
+
+    &:hover {
+      border-color: darken($couleur-bordure, 8%);
+      transform: translateX(2px);
+    }
+
+    // Cascade via --si
+    &--anime {
+      opacity: 0;
+      animation: none;
+    }
+  }
+
+  &--visible &__spec-item--anime {
+    animation: specEntree 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(0.3s + var(--si) * 0.08s);
+  }
+
+  &__spec-icone {
+    color: $couleur-texte-clair;
+    flex-shrink: 0;
+  }
+
+  // Équipements — cascade
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.87rem;
+    font-weight: 500;
+    padding: 0.1rem 0;
+
+    &--ok  { color: $couleur-succes; }
+    &--non { color: $couleur-texte-subtil; }
+
+    &--anime {
+      opacity: 0;
+      animation: none;
+    }
+  }
+
+  &--visible &__option--anime {
+    animation: optionEntree 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(0.5s + var(--oi) * 0.07s);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    .btn {
+      transition: background 0.15s, transform 0.2s, opacity 0.15s;
+
+      &:hover:not(:disabled) { transform: translateY(-2px); }
+      &:active:not(:disabled) { transform: translateY(0); }
+    }
+  }
+}
+
+// Keyframes modal
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleInModal {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
