@@ -59,6 +59,7 @@ function Footer() {
         {/* Bas de footer */}
         <div className="footer__bas">
           <span>&copy; {annee} LM Prestige. Tous droits réservés.</span>
+          <div className="footer__mention-or">Location Premium</div>
           <span>Pays de Gex · Ain · Genève</span>
         </div>
       </div>

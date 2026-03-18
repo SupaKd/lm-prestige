@@ -1,32 +1,76 @@
-// Variables — thème Revolut-inspired
-// Fond blanc pur, noir très dense, bleu électrique, UI épurée
-$couleur-primaire: #191c1f;        // noir Revolut (quasi-noir)
-$couleur-accent: #0075EB;          // bleu électrique Revolut
-$couleur-accent-hover: #005ec4;
-$couleur-accent-light: rgba(0, 117, 235, 0.08);
-$couleur-fond: #ffffff;            // blanc pur
-$couleur-fond-alt: #f7f7f8;        // gris très clair (surfaces secondaires)
-$couleur-fond-sombre: #191c1f;
-$couleur-texte: #191c1f;
-$couleur-texte-clair: #72777a;
-$couleur-texte-subtil: #a8adb0;
-$couleur-blanc: #ffffff;
-$couleur-bordure: #e8eaed;
-$couleur-succes: #00b386;
-$couleur-warning: #f5a623;
+// ═══════════════════════════════════════════════════════════════
+// LM PRESTIGE — Design System
+// Direction : Dark Luxury + Editorial + Curseur custom
+// Palette : noir profond / or chaud / blanc cassé / bleu discret
+// ═══════════════════════════════════════════════════════════════
 
-$police-principale: 'Inter', sans-serif;
-$rayon-bordure: 12px;
-$rayon-bordure-lg: 20px;
-$rayon-pill: 50px;
-$ombre: 0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
-$ombre-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
+// ── Palette ──────────────────────────────────────────────────
+$noir:             #0a0a0a;          // fond dark profond
+$noir-card:        #111111;          // surfaces cards dark
+$noir-eleve:       #181818;          // surfaces secondaires
+$noir-bordure:     #242424;          // bordures subtiles dark
+$or:               #C9A84C;          // or chaud signature
+$or-clair:         #e8c97a;          // or hover
+$or-light:         rgba(201, 168, 76, 0.1);
+$blanc-casse:      #F5F0E8;          // blanc chaud (texte sur dark)
+$blanc-subtil:     rgba(245, 240, 232, 0.55);
+$blanc-discret:    rgba(245, 240, 232, 0.2);
+$blanc-pur:        #ffffff;
 
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
+// Sections claires (catalogue)
+$fond-clair:       #F8F6F2;          // blanc chaud/crème
+$fond-clair-card:  #FFFFFF;
+$texte-clair-fond: #0a0a0a;
+$texte-secondaire: #5a5652;
+$bordure-clair:    #E8E4DC;
 
-// Reset & base
+// Accents
+$bleu:             #1a56db;          // bleu réservé aux badges info
+$succes:           #16a34a;
+$erreur:           #dc2626;
+
+// ── Typographie ──────────────────────────────────────────────
+$serif:            'Playfair Display', Georgia, serif;
+$sans:             'Inter', sans-serif;
+
+// ── Géométrie ────────────────────────────────────────────────
+$r-sm:             8px;
+$r-md:             16px;
+$r-lg:             24px;
+$r-pill:           100px;
+
+// ── Breakpoints ──────────────────────────────────────────────
+$bp-sm:            480px;
+$bp-md:            768px;
+$bp-lg:            1024px;
+$bp-xl:            1280px;
+
+// Rétrocompatibilité (partials existants)
+$couleur-accent:        $or;
+$couleur-accent-hover:  $or-clair;
+$couleur-accent-light:  $or-light;
+$couleur-fond:          $fond-clair;
+$couleur-fond-alt:      #F0EDE7;
+$couleur-fond-sombre:   $noir;
+$couleur-texte:         $texte-clair-fond;
+$couleur-texte-clair:   $texte-secondaire;
+$couleur-texte-subtil:  #8c8884;
+$couleur-blanc:         $blanc-pur;
+$couleur-bordure:       $bordure-clair;
+$couleur-primaire:      $noir;
+$couleur-succes:        $succes;
+$couleur-warning:       #d97706;
+$police-principale:     $sans;
+$rayon-bordure:         $r-md;
+$rayon-bordure-lg:      $r-lg;
+$rayon-pill:            $r-pill;
+$ombre:                 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+$ombre-hover:           0 8px 32px rgba(0,0,0,0.14);
+$breakpoint-md:         $bp-md;
+$breakpoint-lg:         $bp-lg;
+$breakpoint-xl:         $bp-xl;
+
+// ── Reset ─────────────────────────────────────────────────────
 *,
 *::before,
 *::after {
@@ -38,135 +82,178 @@ $breakpoint-xl: 1280px;
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: $police-principale;
-  color: $couleur-texte;
-  background-color: $couleur-fond;
+  font-family: $sans;
+  background-color: $noir;
+  color: $blanc-casse;
   line-height: 1.6;
   font-size: 16px;
 }
 
-img {
-  max-width: 100%;
-  display: block;
-}
+img  { max-width: 100%; display: block; }
+a    { text-decoration: none; color: inherit; }
+ul   { list-style: none; }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul {
-  list-style: none;
-}
-
-// Conteneur global
+// ── Conteneur ─────────────────────────────────────────────────
 .conteneur {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
+
+  @media (max-width: $bp-md) { padding: 0 1.25rem; }
 }
 
-// Boutons — style pill Revolut
+// ── Boutons ───────────────────────────────────────────────────
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.7rem 1.4rem;
-  border-radius: $rayon-pill;
-  font-size: 0.9rem;
-  font-weight: 600;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: $r-pill;
+  font-size: 0.88rem;
+  font-weight: 500;
   cursor: pointer;
   border: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
-  font-family: $police-principale;
-  letter-spacing: -0.01em;
+  font-family: $sans;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
+  &:hover  { transform: translateY(-2px); }
+  &:active { transform: translateY(0); }
+
+  // Primaire — or sur noir
   &--primaire {
-    background-color: $couleur-accent;
-    color: $couleur-blanc;
+    background-color: $or;
+    color: $noir;
+
+    &:hover { background-color: $or-clair; }
+  }
+
+  // Contour — bordure or transparent
+  &--contour {
+    background-color: transparent;
+    color: $blanc-casse;
+    border: 1px solid rgba($blanc-casse, 0.3);
 
     &:hover {
-      background-color: $couleur-accent-hover;
+      border-color: $or;
+      color: $or;
     }
   }
 
+  // Secondaire clair (sur fond blanc)
   &--secondaire {
-    background-color: $couleur-fond-alt;
-    color: $couleur-texte;
-    border: none;
+    background-color: $fond-clair;
+    color: $texte-clair-fond;
+    border: 1px solid $bordure-clair;
 
-    &:hover {
-      background-color: darken($couleur-fond-alt, 3%);
-    }
+    &:hover { background-color: darken($fond-clair, 3%); }
   }
 
+  // Blanc ghost (hero)
   &--blanc {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: $couleur-blanc;
-    backdrop-filter: blur(4px);
+    background-color: rgba($blanc-pur, 0.08);
+    color: $blanc-casse;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($blanc-pur, 0.15);
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
+    &:hover { background-color: rgba($blanc-pur, 0.15); }
   }
 
   &--grand {
-    padding: 0.85rem 1.75rem;
-    font-size: 0.95rem;
+    padding: 0.9rem 2rem;
+    font-size: 0.9rem;
   }
 }
 
-// Badge disponibilité — pill sobre
+// ── Badges ────────────────────────────────────────────────────
 .badge {
-  display: inline-block;
-  padding: 0.2rem 0.7rem;
-  border-radius: $rayon-pill;
-  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: $r-pill;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 
   &--disponible {
-    background-color: rgba($couleur-succes, 0.1);
-    color: $couleur-succes;
+    background-color: rgba($succes, 0.12);
+    color: #22c55e;
+    border: 1px solid rgba($succes, 0.25);
   }
 
   &--indisponible {
-    background-color: rgba(#e5484d, 0.1);
-    color: #e5484d;
+    background-color: rgba($erreur, 0.1);
+    color: #f87171;
+    border: 1px solid rgba($erreur, 0.2);
+  }
+
+  &--populaire {
+    background-color: $or;
+    color: $noir;
+    border: none;
+    box-shadow: 0 2px 12px rgba($or, 0.4);
   }
 }
 
-// Titres de section
+// ── Titres de section ─────────────────────────────────────────
 .titre-section {
-  font-size: 2rem;
+  font-family: $serif;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  color: $couleur-texte;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
 
-  span {
-    color: $couleur-accent;
-  }
+  // Sur fond sombre
+  .section-dark & { color: $blanc-casse; }
+
+  // Sur fond clair
+  .section-light & { color: $texte-clair-fond; }
+
+  span { color: $or; }
 }
 
 .sous-titre-section {
-  color: $couleur-texte-clair;
-  font-size: 1rem;
-  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
   font-weight: 400;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  letter-spacing: 0.01em;
+
+  .section-dark & { color: $blanc-subtil; }
+  .section-light & { color: $texte-secondaire; }
 }
 
-// Chargement page
-.page {
-  min-height: 100vh;
+// ── Sections ──────────────────────────────────────────────────
+.section-dark  { background-color: $noir; }
+.section-light { background-color: $fond-clair; }
+
+// ── Reveal ────────────────────────────────────────────────────
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-// Imports des composants
+// ── Page ──────────────────────────────────────────────────────
+.page { min-height: 100vh; }
+
+// ── Imports ───────────────────────────────────────────────────
 @import 'partials/navbar';
 @import 'partials/footer';
 @import 'partials/hero';

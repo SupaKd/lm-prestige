@@ -1,23 +1,19 @@
-// Header catalogue — grande card full width
+// ═══════════════════════════════════════════════════════════════
+// CATALOGUE — Dark Editorial
+// Fond noir, cartes dark, typographie or, index magazine
+// ═══════════════════════════════════════════════════════════════
+
+// ── Header ───────────────────────────────────────────────────
 .catalogue__header {
-  background: linear-gradient(
-    135deg,
-    #191c1f 0%,
-    #1e2329 60%,
-    rgba(0, 117, 235, 0.15) 100%
-  );
-  border: 1.5px solid rgba(255, 255, 255, 0.07);
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
-    0 24px 60px rgba(0, 0, 0, 0.22);
-  padding: 3rem 0;
-  margin: 2.5rem;
-  border-radius: 28px;
+  background: $fond-clair;
+  border-bottom: 1px solid $bordure-clair;
+  padding: 8rem 0 2.5rem; // espace pour la bulle navbar
   opacity: 0;
-  transform: translateY(-16px);
-  transition:
-    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-10px);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: $bp-md) { padding: 7rem 0 2rem; }
 
   &--visible {
     opacity: 1;
@@ -27,110 +23,132 @@
 
 .catalogue__header-inner {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
+  margin-bottom: 2.5rem;
 
-  @media (max-width: $breakpoint-md) {
+  @media (max-width: $bp-md) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
   }
 }
 
 .catalogue__header-titre {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  color: $couleur-blanc;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
+  font-family: $serif;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 700;
+  color: $texte-clair-fond;
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  margin-bottom: 0.6rem;
 
   span {
-    color: $couleur-accent;
+    color: $or;
+    font-style: italic;
   }
 }
 
 .catalogue__header-sous-titre {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.88rem;
+  color: $texte-secondaire;
   font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .catalogue__header-droite {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
+  flex-shrink: 0;
+  text-align: right;
 
-  @media (max-width: $breakpoint-md) {
-    align-items: flex-start;
-  }
+  @media (max-width: $bp-md) { display: none; }
 }
 
-// Catalogue
+.catalogue__compteur {
+  font-family: $serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: $or;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.catalogue__compteur-label {
+  font-size: 0.65rem;
+  color: $texte-secondaire;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-top: 0.2rem;
+}
+
+// ── Filtres ───────────────────────────────────────────────────
 .catalogue {
-  padding: 0 0 5rem;
+  background-color: $fond-clair;
+  padding: 0 0 6rem;
+
+  &__filtres-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+    border-top: 1px solid $bordure-clair;
+    padding-top: 1.5rem;
+  }
 
   &__filtres {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.75rem;
+    flex-wrap: nowrap;
+    padding-bottom: 1.5rem;
   }
 
   &__filtre-btn {
     padding: 0.45rem 1.1rem;
-    border-radius: $rayon-pill;
-    border: 1.5px solid $couleur-bordure;
-    background-color: $couleur-blanc;
-    color: $couleur-texte-clair;
-    font-size: 0.85rem;
+    border-radius: $r-pill;
+    border: 1px solid $bordure-clair;
+    background-color: transparent;
+    color: $texte-secondaire;
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
-    transition: border-color 0.18s, color 0.18s, background-color 0.18s,
-      transform 0.18s;
-    font-family: $police-principale;
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+    font-family: $sans;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 
     &:hover {
-      border-color: $couleur-accent;
-      color: $couleur-accent;
-      transform: translateY(-1px);
+      border-color: $or;
+      color: $or;
     }
 
-    &:active {
-      transform: translateY(0);
-    }
-
-    // Actif : fond noir, pas d'underline
     &--actif {
-      background-color: $couleur-texte;
-      border-color: $couleur-texte;
-      color: $couleur-blanc;
-      transform: none;
+      background-color: $texte-clair-fond;
+      border-color: $texte-clair-fond;
+      color: $blanc-pur;
+      font-weight: 600;
 
       &:hover {
-        background-color: lighten($couleur-texte, 10%);
-        border-color: lighten($couleur-texte, 10%);
-        color: $couleur-blanc;
-        transform: none;
+        background-color: lighten($texte-clair-fond, 12%);
+        border-color: lighten($texte-clair-fond, 12%);
+        color: $blanc-pur;
       }
     }
-  }
-
-  &__resultat {
-    font-size: 0.82rem;
-    color: $couleur-texte-clair;
-    margin-bottom: 1.5rem;
   }
 
   &__grille {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 1px;
+    background: $bordure-clair;
+    border: 1px solid $bordure-clair;
+    border-radius: $r-lg;
+    overflow: hidden;
 
-    @media (max-width: $breakpoint-md) {
+    @media (max-width: $bp-md) {
       grid-template-columns: 1fr;
     }
   }
@@ -138,14 +156,15 @@
   &__vide {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 4rem 2rem;
-    color: $couleur-texte-clair;
+    padding: 5rem 2rem;
+    color: $texte-secondaire;
     font-size: 0.9rem;
+    background: $fond-clair;
   }
 
-  // Wrapper de chaque carte — stagger via custom prop CSS --i
   &__carte-wrapper {
-    animation: carteEntree 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+    background: $fond-clair-card;
+    animation: carteEntree 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
     animation-delay: calc(var(--i) * 0.07s);
   }
 }
@@ -153,62 +172,78 @@
 @keyframes carteEntree {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-// Keyframes shimmer
 @keyframes shimmer {
-  0% {
-    background-position: -600px 0;
-  }
-  100% {
-    background-position: 600px 0;
-  }
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
 }
 
-// Carte véhicule
+// ── Carte véhicule — Light Editorial ─────────────────────────
 .carte-vehicule {
-  background-color: $couleur-blanc;
-  border-radius: $rayon-bordure-lg;
+  background-color: $fond-clair-card;
   overflow: hidden;
-  border: 1.5px solid $couleur-bordure;
-  transition: border-color 0.2s, box-shadow 0.25s,
-    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  transition: background-color 0.25s ease;
   display: flex;
-  flex-direction: row-reverse; // photo à droite, texte à gauche
+  flex-direction: row-reverse;
   cursor: pointer;
+  position: relative;
 
   &:hover {
-    border-color: darken($couleur-bordure, 6%);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    background-color: #faf8f5;
   }
 
   &--indisponible {
-    opacity: 0.6;
+    opacity: 0.45;
     pointer-events: none;
   }
 
+  @media (max-width: $bp-md) {
+    flex-direction: column;
+  }
+
+  // ── Numéro index magazine ──
+  &__index {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: rgba($texte-clair-fond, 0.18);
+    text-transform: uppercase;
+    z-index: 3;
+    transition: color 0.25s;
+    font-family: $sans;
+  }
+
+  &:hover &__index { color: rgba($or, 0.6); }
+
+  // ── Image ──
   &__image {
     position: relative;
-    width: 220px;
+    width: 260px;
     flex-shrink: 0;
     overflow: hidden;
-    background-color: $couleur-fond-alt;
+    background-color: #ede9e3;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
     }
 
-    @media (max-width: 480px) {
-      width: 130px;
+    @media (max-width: $bp-md) {
+      width: 100%;
+      height: 210px;
     }
   }
 
@@ -216,58 +251,60 @@
     transform: scale(1.06);
   }
 
-  // Shimmer skeleton
+  // Shimmer clair
   &__shimmer {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       90deg,
-      $couleur-fond-alt 25%,
-      darken($couleur-fond-alt, 3%) 37%,
-      $couleur-fond-alt 63%
+      #ede9e3 25%,
+      #e4ded7 37%,
+      #ede9e3 63%
     );
     background-size: 600px 100%;
     animation: shimmer 1.4s infinite linear;
   }
 
-  // Overlay sombre + bouton
+  // Overlay hover sur image
   &__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.55) 0%,
-      transparent 55%
-    );
+    background: linear-gradient(to top, rgba($noir, 0.75) 0%, transparent 50%);
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 1rem;
+    padding-bottom: 1.1rem;
     opacity: 0;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.28s ease;
   }
 
-  &:hover &__overlay {
-    opacity: 1;
-  }
+  &:hover &__overlay { opacity: 1; }
 
   &__overlay-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background-color: $couleur-blanc;
-    color: $couleur-texte;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.42rem 0.95rem;
-    border-radius: $rayon-pill;
-    transform: translateY(6px);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: $or;
+    color: $noir;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.42rem 1rem;
+    border-radius: $r-pill;
+    transform: translateY(8px);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     white-space: nowrap;
   }
 
-  &:hover &__overlay-btn {
-    transform: translateY(0);
+  &:hover &__overlay-btn { transform: translateY(0); }
+
+  // Badges
+  &__badge-populaire {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
   }
 
   &__badge-dispo {
@@ -277,74 +314,101 @@
     z-index: 1;
   }
 
+  // ── Contenu texte ──
   &__contenu {
-    padding: 1.2rem;
+    padding: 1.75rem 1.5rem;
     flex: 1;
     display: flex;
     flex-direction: column;
+    border-left: 1px solid $bordure-clair;
+
+    @media (max-width: $bp-md) {
+      border-left: none;
+      border-top: 1px solid $bordure-clair;
+      padding: 1.25rem;
+    }
   }
 
   &__categorie {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: $couleur-texte-subtil;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
+    letter-spacing: 0.14em;
+    color: $or;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    opacity: 0.75;
+    transition: opacity 0.2s;
   }
 
+  &:hover &__categorie { opacity: 1; }
+
   &__nom {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $couleur-texte;
-    margin-bottom: 0.75rem;
+    font-family: $serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $texte-clair-fond;
+    margin-bottom: 1rem;
     letter-spacing: -0.02em;
+    line-height: 1.15;
+    transition: color 0.2s;
   }
+
+  &:hover &__nom { color: darken($or, 8%); }
 
   &__specs {
     display: flex;
-    gap: 0.85rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
-    margin-bottom: 1rem;
+    margin-bottom: auto;
+    padding-bottom: 1.25rem;
   }
 
   &__spec {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    font-size: 0.77rem;
-    color: $couleur-texte-clair;
+    font-size: 0.72rem;
+    color: $texte-secondaire;
+    font-weight: 500;
   }
 
   &__bas {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 0.9rem;
-    border-top: 1px solid $couleur-bordure;
-    margin-top: auto;
+    padding-top: 1.1rem;
+    border-top: 1px solid $bordure-clair;
+    margin-top: 1.25rem;
+    transition: border-color 0.25s;
   }
 
+  &:hover &__bas { border-top-color: rgba($or, 0.35); }
+
   &__prix {
-    font-size: 1.15rem;
+    font-family: $serif;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: $couleur-texte;
-    letter-spacing: -0.02em;
+    color: $texte-clair-fond;
+    letter-spacing: -0.03em;
+    line-height: 1;
 
     span {
-      font-size: 0.77rem;
+      font-family: $sans;
+      font-size: 0.72rem;
       font-weight: 400;
-      color: $couleur-texte-clair;
+      color: $texte-secondaire;
     }
   }
 
   &__btn {
-    padding: 0.42rem 0.85rem;
-    font-size: 0.82rem;
-    transition: background-color 0.15s, transform 0.2s ease;
+    padding: 0.45rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.15s, transform 0.2s, color 0.15s;
   }
 
   &:hover &__btn {
-    transform: translateX(2px);
+    transform: translateX(3px);
   }
 }

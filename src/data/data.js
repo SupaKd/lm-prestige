@@ -10,6 +10,7 @@ export const vehicules = [
     transmission: 'manuelle',
     carburant: 'essence',
     disponible: true,
+    populaire: false,
     images: [
       'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&q=80',
       'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80',
@@ -32,6 +33,7 @@ export const vehicules = [
     transmission: 'automatique',
     carburant: 'diesel',
     disponible: true,
+    populaire: true,
     images: [
       'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80',
@@ -54,6 +56,7 @@ export const vehicules = [
     transmission: 'automatique',
     carburant: 'hybride',
     disponible: true,
+    populaire: true,
     images: [
       'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80',
       'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80',
@@ -76,6 +79,7 @@ export const vehicules = [
     transmission: 'manuelle',
     carburant: 'diesel',
     disponible: false,
+    populaire: false,
     images: [
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
       'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80',
@@ -98,6 +102,7 @@ export const vehicules = [
     transmission: 'automatique',
     carburant: 'diesel',
     disponible: true,
+    populaire: true,
     images: [
       'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
       'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&q=80',
@@ -120,6 +125,7 @@ export const vehicules = [
     transmission: 'manuelle',
     carburant: 'essence',
     disponible: true,
+    populaire: false,
     images: [
       'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80',
       'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?w=800&q=80',

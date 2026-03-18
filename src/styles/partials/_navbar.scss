@@ -1,129 +1,168 @@
-// Navbar
-// — transition hauteur/blur au scroll
-// — underline animé sur lien actif
-// — drawer mobile avec slide-down
+// ── Navbar — Bulle flottante centrée ─────────────────────────
 .navbar {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
-  background-color: rgba($couleur-blanc, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  width: calc(100% - 3rem);
+  max-width: 860px;
 
-  // État scrolled : bordure + ombre légère
-  &--scrolled {
-    background-color: rgba($couleur-blanc, 0.96);
-    border-bottom-color: $couleur-bordure;
-    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
-
-    .navbar__inner {
-      height: 56px;
-    }
-  }
-
-  &__inner {
+  // Bulle principale
+  &__bulle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
-    transition: height 0.3s ease;
+    height: 56px;
+    padding: 0 1rem 0 1.25rem;
+    border-radius: $r-pill;
+    background-color: rgba($noir, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba($blanc-casse, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 1px 0 rgba($blanc-casse, 0.06) inset;
+    transition: background-color 0.35s ease, border-color 0.35s ease,
+                box-shadow 0.35s ease, height 0.3s ease;
   }
 
+  // Scrolled — bulle plus opaque
+  &--scrolled &__bulle {
+    background-color: rgba($noir, 0.85);
+    border-color: rgba($blanc-casse, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba($blanc-casse, 0.06) inset;
+    height: 52px;
+  }
+
+  // Sur fond clair
+  &--clair &__bulle {
+    background-color: rgba($fond-clair, 0.88);
+    border-color: rgba($texte-clair-fond, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .navbar__logo { color: $texte-clair-fond; span { color: $or; } }
+    .navbar__lien { color: $texte-secondaire;
+      &:hover, &.actif { color: $texte-clair-fond; }
+    }
+    .navbar__menu-mobile { color: $texte-clair-fond; }
+  }
+
+  // Logo
   &__logo {
+    font-family: $serif;
     font-size: 1.1rem;
     font-weight: 700;
-    color: $couleur-texte;
-    letter-spacing: -0.04em;
+    color: $blanc-casse;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: opacity 0.2s;
 
-    span { color: $couleur-accent; }
-
-    &:hover { opacity: 0.75; }
+    span { color: $or; }
+    &:hover { opacity: 0.8; }
   }
 
+  // Nav centrale
   &__nav {
     display: flex;
     align-items: center;
     gap: 0.1rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 
-    @media (max-width: $breakpoint-md) { display: none; }
+    @media (max-width: $bp-md) { display: none; }
   }
 
-  // Lien avec underline animé par pseudo-élément
   &__lien {
     position: relative;
-    color: $couleur-texte-clair;
-    font-size: 0.88rem;
+    color: rgba($blanc-casse, 0.6);
+    font-size: 0.78rem;
     font-weight: 500;
-    padding: 0.4rem 0.8rem;
-    border-radius: $rayon-pill;
-    transition: color 0.2s;
-
-    span {
-      position: relative;
-
-      // Underline animé
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: $couleur-accent;
-        border-radius: 2px;
-        transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-    }
+    padding: 0.4rem 0.85rem;
+    border-radius: $r-pill;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    transition: color 0.2s, background-color 0.2s;
 
     &:hover {
-      color: $couleur-texte;
-
-      span::after { width: 100%; }
+      color: $blanc-casse;
+      background-color: rgba($blanc-casse, 0.07);
     }
 
     &.actif {
-      color: $couleur-texte;
-      font-weight: 600;
+      color: $blanc-casse;
+      background-color: rgba($blanc-casse, 0.08);
 
-      span::after { width: 100%; }
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 1px;
+        background-color: $or;
+        border-radius: 1px;
+      }
     }
   }
 
+  // CTA desktop
   &__cta {
-    @media (max-width: $breakpoint-md) { display: none; }
+    flex-shrink: 0;
+    @media (max-width: $bp-md) { display: none; }
+
+    .btn {
+      padding: 0.5rem 1.1rem;
+      font-size: 0.78rem;
+    }
+  }
+
+  // Bouton menu mobile
+  // Groupe CTA + burger — mobile uniquement
+  &__mobile-droite {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+
+    @media (max-width: $bp-md) { display: flex; }
+  }
+
+  &__cta-mobile {
+    padding: 0.42rem 0.9rem;
+    font-size: 0.75rem;
   }
 
   &__menu-mobile {
-    display: none;
+    display: flex;
     background: none;
     border: none;
-    cursor: pointer;
-    color: $couleur-texte;
+    color: $blanc-casse;
     padding: 0.4rem;
-    border-radius: $rayon-bordure;
-    transition: background 0.15s;
+    border-radius: $r-sm;
+    transition: color 0.15s;
 
-    &:hover { background-color: $couleur-fond-alt; }
-
-    @media (max-width: $breakpoint-md) { display: flex; }
+    &:hover { color: $or; }
   }
 
-  // Drawer mobile — slide-down + fade
+  // Drawer mobile — tombe sous la bulle
   &__mobile-drawer {
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease;
-    border-top: 1px solid transparent;
+    transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.28s ease;
+    margin-top: 0.5rem;
+    border-radius: $r-lg;
+    background-color: rgba($noir, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba($blanc-casse, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 
     &--ouvert {
-      max-height: 300px;
+      max-height: 320px;
       opacity: 1;
-      border-top-color: $couleur-bordure;
     }
   }
 
@@ -131,14 +170,12 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    padding: 1rem 0 1.25rem;
+    padding: 1rem;
 
     .navbar__lien {
-      font-size: 1rem;
-      padding: 0.6rem 0.5rem;
-      border-radius: $rayon-bordure;
-
-      &:hover { background-color: $couleur-fond-alt; }
+      font-size: 0.95rem;
+      padding: 0.65rem 0.75rem;
+      letter-spacing: 0.04em;
     }
   }
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
 
 // Lightbox plein écran avec navigation
@@ -23,7 +24,7 @@ function Lightbox({ images, indexInitial, onFermer }) {
     return () => { document.body.style.overflow = '' }
   }, [])
 
-  return (
+  return createPortal(
     <div className="lightbox" onClick={onFermer} role="dialog" aria-modal="true">
       {/* Fermer */}
       <button className="lightbox__fermer" onClick={onFermer} aria-label="Fermer">
@@ -70,7 +71,8 @@ function Lightbox({ images, indexInitial, onFermer }) {
           ))}
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   )
 }
 

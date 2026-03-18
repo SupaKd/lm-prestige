@@ -2,18 +2,15 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Users, Fuel, Settings, ArrowRight } from 'lucide-react'
 
-// Carte véhicule
-// — hover : lift + overlay sombre sur l'image + bouton visible
-// — shimmer si image non encore chargée
-function CarteVehicule({ vehicule }) {
-  const { id, nom, categorie, prix_jour, places, transmission, carburant, disponible, images } = vehicule
+function CarteVehicule({ vehicule, index = 0 }) {
+  const { id, nom, categorie, prix_jour, places, transmission, carburant, disponible, populaire, images } = vehicule
   const [imageChargee, setImageChargee] = useState(false)
 
   return (
     <article className={`carte-vehicule${!disponible ? ' carte-vehicule--indisponible' : ''}`}>
+      <span className="carte-vehicule__index">{String(index + 1).padStart(2, '0')}</span>
       {/* Image */}
       <div className="carte-vehicule__image">
-        {/* Shimmer pendant le chargement */}
         {!imageChargee && <div className="carte-vehicule__shimmer" />}
 
         <img
@@ -24,15 +21,23 @@ function CarteVehicule({ vehicule }) {
           style={{ opacity: imageChargee ? 1 : 0 }}
         />
 
-        {/* Overlay au hover avec bouton rapide */}
+        {/* Overlay hover */}
         <div className="carte-vehicule__overlay">
           {disponible && (
             <Link to={`/vehicule/${id}`} className="carte-vehicule__overlay-btn">
-              Voir le véhicule <ArrowRight size={14} />
+              Réserver <ArrowRight size={12} />
             </Link>
           )}
         </div>
 
+        {/* Badge populaire */}
+        {populaire && (
+          <div className="carte-vehicule__badge-populaire">
+            <span className="badge badge--populaire">⚡ Populaire</span>
+          </div>
+        )}
+
+        {/* Badge dispo */}
         <div className="carte-vehicule__badge-dispo">
           <span className={`badge badge--${disponible ? 'disponible' : 'indisponible'}`}>
             {disponible ? 'Disponible' : 'Indisponible'}
@@ -47,13 +52,13 @@ function CarteVehicule({ vehicule }) {
 
         <div className="carte-vehicule__specs">
           <span className="carte-vehicule__spec">
-            <Users size={13} /> {places} places
+            <Users size={12} /> {places} places
           </span>
           <span className="carte-vehicule__spec">
-            <Settings size={13} /> {transmission}
+            <Settings size={12} /> {transmission}
           </span>
           <span className="carte-vehicule__spec">
-            <Fuel size={13} /> {carburant}
+            <Fuel size={12} /> {carburant}
           </span>
         </div>
 
@@ -63,9 +68,9 @@ function CarteVehicule({ vehicule }) {
           </div>
           <Link
             to={`/vehicule/${id}`}
-            className="btn btn--primaire carte-vehicule__btn"
+            className="btn btn--secondaire carte-vehicule__btn"
           >
-            Voir <ArrowRight size={13} />
+            Voir <ArrowRight size={12} />
           </Link>
         </div>
       </div>

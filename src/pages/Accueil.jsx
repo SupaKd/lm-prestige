@@ -1,37 +1,36 @@
 import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Car, Star, Shield, Clock, MapPin, ChevronRight } from "lucide-react";
+import { Star, Shield, Clock, MapPin } from "lucide-react";
 import { vehicules, categories } from "../data/data";
 import CarteAvantage from "../components/ui/CarteAvantage";
 import WidgetReservation from "../components/ui/WidgetReservation";
 
 const avantages = [
   {
-    icone: <Star size={22} />,
+    icone: <Star size={20} />,
     titre: "Flotte récente",
     texte: "Véhicules renouvelés régulièrement, moins de 2 ans d'ancienneté.",
   },
   {
-    icone: <Shield size={22} />,
+    icone: <Shield size={20} />,
     titre: "Assurance incluse",
     texte:
-      "Tous nos véhicules sont couverts tous risques. Vous conduisez l'esprit tranquille.",
+      "Tous nos véhicules sont couverts tous risques. Conduisez l'esprit tranquille.",
   },
   {
-    icone: <Clock size={22} />,
+    icone: <Clock size={20} />,
     titre: "Disponible 7j/7",
     texte:
-      "Service de location disponible tous les jours, y compris week-end et jours fériés.",
+      "Service de location disponible tous les jours, week-ends et jours fériés.",
   },
   {
-    icone: <MapPin size={22} />,
+    icone: <MapPin size={20} />,
     titre: "Zone Gex & Genève",
     texte:
-      "Livraison possible à Gex, Ferney-Voltaire, Divonne et à l'aéroport de Genève.",
+      "Livraison à Gex, Ferney-Voltaire, Divonne et à l'aéroport de Genève.",
   },
 ];
 
-// Hook : déclenche une classe d'entrée sur les éléments qui entrent dans le viewport
 function useRevealOnScroll(selector) {
   useEffect(() => {
     const elements = document.querySelectorAll(selector);
@@ -44,7 +43,7 @@ function useRevealOnScroll(selector) {
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -55,43 +54,39 @@ function Accueil() {
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const photoRef = useRef(null);
-  const ligne1Ref = useRef(null); // "Louez le véhicule"
-  const ligne2Ref = useRef(null); // "idéal pour chaque trajet"
-  const ridеauRef = useRef(null);
+  const ligne1Ref = useRef(null);
+  const ligne2Ref = useRef(null);
+  const rideauRef = useRef(null);
   const bodyRef = useRef(null);
   const rafRef = useRef(null);
 
-  // Scroll driver — split titre + rideau
+  // Scroll driver
   useEffect(() => {
     const onScroll = () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         const wh = window.innerHeight;
         const sy = window.scrollY;
-        // progress 0→1 sur 1 viewport de scroll
         const p = Math.max(0, Math.min(1, sy / wh));
 
-        // Phase 1 (0→0.5) : titre split gauche/droite + corps s'efface
         const pSplit = Math.min(1, p / 0.5);
         if (ligne1Ref.current)
-          ligne1Ref.current.style.transform = `translateX(${-pSplit * 120}px)`;
+          ligne1Ref.current.style.transform = `translateX(${-pSplit * 140}px)`;
         if (ligne2Ref.current)
-          ligne2Ref.current.style.transform = `translateX(${pSplit * 120}px)`;
+          ligne2Ref.current.style.transform = `translateX(${pSplit * 140}px)`;
         if (bodyRef.current) {
-          bodyRef.current.style.opacity = `${1 - pSplit * 1.4}`;
-          bodyRef.current.style.transform = `translateY(${pSplit * 30}px)`;
+          bodyRef.current.style.opacity = `${1 - pSplit * 1.5}`;
+          bodyRef.current.style.transform = `translateY(${pSplit * 40}px)`;
         }
 
-        // Parallax photo — monte doucement
         if (photoRef.current)
-          photoRef.current.style.transform = `scale(1.08) translateY(${
-            p * 80
+          photoRef.current.style.transform = `scale(1.06) translateY(${
+            p * 90
           }px)`;
 
-        // Phase 2 (0.5→1) : rideau noir descend
         const pRideau = Math.max(0, (p - 0.5) / 0.5);
-        if (ridеauRef.current)
-          ridеauRef.current.style.transform = `translateY(${
+        if (rideauRef.current)
+          rideauRef.current.style.transform = `translateY(${
             (1 - pRideau) * -100
           }%)`;
       });
@@ -112,7 +107,6 @@ function Accueil() {
     requestAnimationFrame(() => el.classList.add("hero--visible"));
   }, []);
 
-  // Reveal au scroll pour les sections suivantes
   useRevealOnScroll(".reveal");
 
   const categoriesAvecCompte = categories
@@ -124,61 +118,74 @@ function Accueil() {
 
   return (
     <main className="page">
-      {/* ── Hero full viewport ── */}
+      {/* ── Hero ── */}
       <section className="hero" ref={heroRef}>
-        {/* Photo full — parallax au scroll */}
         <div className="hero__photo-wrap">
           <img
             ref={photoRef}
-            src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1600&q=85"
+            src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1800&q=90"
             alt="LM Prestige"
             className="hero__photo"
           />
         </div>
 
-        {/* Overlay dégradé */}
         <div className="hero__overlay" />
+        <div className="hero__grain" />
+        <div className="hero__trait-or" />
+        <div className="hero__rideau" ref={rideauRef} />
 
-        {/* Rideau noir — descend en phase 2 du scroll */}
-        <div className="hero__rideau" ref={ridеauRef} />
-
-        {/* Contenu — flux vertical centré */}
         <div className="hero__body" ref={bodyRef}>
-          {/* Titre massif — 2 lignes qui s'écartent au scroll */}
+          {/* Titre serif massif */}
           <h1 className="hero__titre">
             <span className="hero__titre-ligne" ref={ligne1Ref}>
               <span className="hero__mot" style={{ "--d": "0s" }}>
                 Louez
               </span>
-              <span className="hero__mot" style={{ "--d": "0.08s" }}>
+              <span
+                className="hero__mot hero__mot--italic"
+                style={{ "--d": "0.1s" }}
+              >
                 le
               </span>
-              <span className="hero__mot" style={{ "--d": "0.16s" }}>
+              <span className="hero__mot" style={{ "--d": "0.2s" }}>
                 véhicule
               </span>
             </span>
             <span className="hero__titre-ligne" ref={ligne2Ref}>
               <span
-                className="hero__mot hero__mot--accent"
-                style={{ "--d": "0.26s" }}
+                className="hero__mot hero__mot--or"
+                style={{ "--d": "0.32s" }}
               >
                 idéal
               </span>
-              <span className="hero__mot" style={{ "--d": "0.34s" }}>
+              <span className="hero__mot" style={{ "--d": "0.42s" }}>
                 pour
               </span>
-              <span className="hero__mot" style={{ "--d": "0.42s" }}>
+              <span className="hero__mot" style={{ "--d": "0.52s" }}>
                 chaque
               </span>
-              <span className="hero__mot" style={{ "--d": "0.5s" }}>
+              <span className="hero__mot" style={{ "--d": "0.62s" }}>
                 trajet
               </span>
             </span>
           </h1>
 
-          {/* Widget réservation — directement sous le titre */}
+          {/* Filet or */}
+          <div className="hero__ligne" />
+
+          {/* Widget */}
           <div className="hero__widget-inline">
             <WidgetReservation />
+          </div>
+
+          {/* CTA mobile uniquement */}
+          <div className="hero__cta-mobile">
+            <Link to="/catalogue" className="btn btn--primaire">
+              Voir les véhicules
+            </Link>
+            <a href="tel:+33450000000" className="btn btn--contour">
+              Appeler
+            </a>
           </div>
 
           {/* Sous-titre + actions */}
@@ -190,9 +197,12 @@ function Accueil() {
             </p>
             <div className="hero__actions">
               <Link to="/catalogue" className="btn btn--primaire btn--grand">
-                <Car size={17} /> Voir les véhicules
+                Voir les véhicules
               </Link>
-              <a href="tel:+33450000000" className="btn btn--blanc btn--grand">
+              <a
+                href="tel:+33450000000"
+                className="btn btn--contour btn--grand"
+              >
                 Nous appeler
               </a>
             </div>
@@ -208,7 +218,7 @@ function Accueil() {
               <div
                 key={i}
                 className="hero__stat"
-                style={{ "--sd": `${0.6 + i * 0.1}s` }}
+                style={{ "--sd": `${0.75 + i * 0.12}s` }}
               >
                 <span className="hero__stat-chiffre">{n}</span>
                 <span className="hero__stat-label">{l}</span>
@@ -217,96 +227,75 @@ function Accueil() {
           </div>
         </div>
 
-        {/* Indicateur scroll */}
         <div className="hero__scroll-hint">
           <div className="hero__scroll-hint-line" />
           <span>Scroll</span>
         </div>
       </section>
 
-      {/* Bandeau stats */}
-      <div className="bandeau-stats">
-        {[
-          { n: "6+", l: "Véhicules disponibles" },
-          { n: "7j/7", l: "Service disponible" },
-          { n: "45€", l: "Dès / jour" },
-        ].map(({ n, l }, i) => (
-          <div key={i} className="bandeau-stats__item">
-            <span className="bandeau-stats__chiffre">{n}</span>
-            <span className="bandeau-stats__label">{l}</span>
-          </div>
-        ))}
+      {/* Bandeau marquee — logos marques */}
+      <div className="bandeau-marquee">
+        <div className="bandeau-marquee__track">
+          {[
+            'Peugeot', 'Volkswagen', 'Toyota', 'Renault', 'BMW', 'Dacia',
+            'Mercedes', 'Audi', 'Citroën', 'Ford', 'Opel', 'Seat',
+            'Peugeot', 'Volkswagen', 'Toyota', 'Renault', 'BMW', 'Dacia',
+            'Mercedes', 'Audi', 'Citroën', 'Ford', 'Opel', 'Seat',
+          ].map((marque, i) => (
+            <span key={i} className="bandeau-marquee__item">
+              {marque}
+              <span className="bandeau-marquee__sep">✦</span>
+            </span>
+          ))}
+        </div>
       </div>
 
-      {/* Avantages */}
-      <section className="avantages">
-        <div className="conteneur">
-          <h2 className="titre-section reveal">
-            Pourquoi choisir <span>LM Prestige</span> ?
-          </h2>
-          <p
-            className="sous-titre-section reveal"
-            style={{ transitionDelay: "0.08s" }}
-          >
-            Un service local, humain et fiable depuis le Pays de Gex.
-          </p>
-          <div className="avantages__grille">
-            {avantages.map((a, i) => (
-              <CarteAvantage
-                key={i}
-                index={i}
-                icone={a.icone}
-                titre={a.titre}
-                texte={a.texte}
-                style={{ transitionDelay: `${i * 0.09}s` }}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Catégories — Bento grid full section */}
+      {/* Catégories — strip horizontale */}
       <section className="categories-accueil">
         <div className="bento">
           {categoriesAvecCompte.map((cat, i) => (
             <button
               key={cat.id}
-              className={`bento__carte bento__carte--${cat.id} reveal`}
-              style={{ transitionDelay: `${i * 0.07}s` }}
+              className={`bento__carte bento__carte--${cat.id}`}
               onClick={() => navigate(`/catalogue?categorie=${cat.id}`)}
             >
               <img src={cat.photo} alt={cat.label} className="bento__photo" />
-              <div className="bento__overlay" />
+              <div className="bento__overlay-or" />
+              <span className="bento__index">0{i + 1}</span>
               <div className="bento__contenu">
                 <span className="bento__nom">{cat.label}</span>
-                <span className="bento__nb">
-                  {cat.nb} véhicule{cat.nb > 1 ? "s" : ""}
-                </span>
+                <span className="bento__nb">{cat.nb} véhicule{cat.nb > 1 ? 's' : ''}</span>
               </div>
             </button>
           ))}
         </div>
       </section>
 
-      {/* CTA final */}
+      {/* CTA final — fond noir */}
       <section className="cta-final">
         <div className="conteneur">
-          <h2 className="titre-section reveal" style={{ textAlign: "center" }}>
+          <h2
+            className="titre-section reveal"
+            style={{
+              textAlign: "center",
+              color: "var(--blanc-casse, #F5F0E8)",
+            }}
+          >
             Prêt à <span>réserver</span> ?
           </h2>
           <p
             className="sous-titre-section reveal"
-            style={{ textAlign: "center", transitionDelay: "0.08s" }}
+            style={{ textAlign: "center", transitionDelay: "0.1s" }}
           >
             Consultez notre catalogue et choisissez votre véhicule en quelques
             clics.
           </p>
           <div
             className="reveal"
-            style={{ textAlign: "center", transitionDelay: "0.16s" }}
+            style={{ textAlign: "center", transitionDelay: "0.2s" }}
           >
             <Link to="/catalogue" className="btn btn--primaire btn--grand">
-              Voir tous les véhicules <ChevronRight size={18} />
+              Voir tous les véhicules
             </Link>
           </div>
         </div>

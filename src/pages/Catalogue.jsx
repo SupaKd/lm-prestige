@@ -9,7 +9,6 @@ function Catalogue() {
   const [categorieActive, setCategorieActive] = useState(
     searchParams.get('categorie') || 'tous'
   )
-  // Clé qui change à chaque filtre pour forcer le re-mount des cartes et relancer l'animation
   const [grilleCle, setGrilleCle] = useState(0)
   const enteteRef = useRef(null)
 
@@ -18,7 +17,6 @@ function Catalogue() {
     if (cat) setCategorieActive(cat)
   }, [searchParams])
 
-  // Anime l'entête au montage
   useEffect(() => {
     const el = enteteRef.current
     if (!el) return
@@ -31,14 +29,14 @@ function Catalogue() {
 
   const changerCategorie = (id) => {
     setCategorieActive(id)
-    setGrilleCle((k) => k + 1) // relance le stagger
+    setGrilleCle((k) => k + 1)
     if (id === 'tous') setSearchParams({})
     else setSearchParams({ categorie: id })
   }
 
   return (
-    <main className="page">
-      {/* Header catalogue — full width */}
+    <main className="page" style={{ background: '#F8F6F2' }}>
+      {/* Header */}
       <div className="catalogue__header" ref={enteteRef}>
         <div className="conteneur">
           <div className="catalogue__header-inner">
@@ -51,30 +49,36 @@ function Catalogue() {
               </p>
             </div>
             <div className="catalogue__header-droite">
-              <div className="catalogue__filtres">
-                <SlidersHorizontal size={15} style={{ color: '#a8adb0', flexShrink: 0 }} />
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    className={`catalogue__filtre-btn${categorieActive === cat.id ? ' catalogue__filtre-btn--actif' : ''}`}
-                    onClick={() => changerCategorie(cat.id)}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
+              <div className="catalogue__compteur">
+                {String(vehiculesFiltres.length).padStart(2, '0')}
               </div>
-              <p className="catalogue__resultat">
-                {vehiculesFiltres.length} véhicule{vehiculesFiltres.length > 1 ? 's' : ''} trouvé{vehiculesFiltres.length > 1 ? 's' : ''}
-              </p>
+              <div className="catalogue__compteur-label">
+                véhicule{vehiculesFiltres.length > 1 ? 's' : ''} disponible{vehiculesFiltres.length > 1 ? 's' : ''}
+              </div>
+            </div>
+          </div>
+
+          {/* Filtres */}
+          <div className="catalogue__filtres-wrap">
+            <div className="catalogue__filtres">
+              <SlidersHorizontal size={14} style={{ color: 'rgba(245,240,232,0.25)', flexShrink: 0 }} />
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  className={`catalogue__filtre-btn${categorieActive === cat.id ? ' catalogue__filtre-btn--actif' : ''}`}
+                  onClick={() => changerCategorie(cat.id)}
+                >
+                  {cat.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="conteneur">
+      {/* Grille */}
+      <div className="conteneur" style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
         <section className="catalogue">
-
-          {/* Grille — key force le re-render pour le stagger */}
           <div className="catalogue__grille" key={grilleCle}>
             {vehiculesFiltres.length > 0 ? (
               vehiculesFiltres.map((v, i) => (
@@ -83,7 +87,7 @@ function Catalogue() {
                   className="catalogue__carte-wrapper"
                   style={{ '--i': i }}
                 >
-                  <CarteVehicule vehicule={v} />
+                  <CarteVehicule vehicule={v} index={i} />
                 </div>
               ))
             ) : (

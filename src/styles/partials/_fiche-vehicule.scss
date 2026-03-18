@@ -1,313 +1,364 @@
-// Keyframes fiche
+// ═══════════════════════════════════════════════════════════════
+// FICHE VÉHICULE — Editorial Magazine + Split Sticky
+// Fond crème, filigrane numéro, tableau specs, galerie sticky
+// ═══════════════════════════════════════════════════════════════
+
 @keyframes specEntree {
   from { opacity: 0; transform: translateX(-10px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes optionEntree {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
+@keyframes ficheEntree {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-// Fiche véhicule
+// ── En-tête de navigation ─────────────────────────────────────
+.fiche-vehicule__entete {
+  padding: 7rem 0 1.5rem;
+  border-bottom: 1px solid $bordure-clair;
+  background: $fond-clair;
+
+  @media (max-width: $bp-md) { padding: 6rem 0 1.25rem; }
+}
+
+.fiche-vehicule__entete-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fiche-vehicule__retour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $texte-secondaire;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: $sans;
+  padding: 0;
+
+  &:hover { color: $texte-clair-fond; }
+}
+
+.fiche-vehicule__breadcrumb {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba($texte-clair-fond, 0.3);
+  font-weight: 500;
+}
+
+// ── Layout principal ──────────────────────────────────────────
 .fiche-vehicule {
-  padding: 2.5rem 0 5rem;
+  background: $fond-clair;
+}
 
-  &__retour {
-    margin-bottom: 2rem;
-  }
+.fiche-vehicule__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: start;
+  padding: 3rem 0 6rem;
 
-  &__grille {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
-
-    @media (max-width: $breakpoint-lg) {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
-  }
-
-  // Chaque bloc (galerie + infos) — fade + slide-up à l'entrée
-  &__bloc {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s),
-                transform 0.55s cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s);
-  }
-
-  &--visible &__bloc {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  // Galerie
-  &__galerie {
-    position: sticky;
-    top: 80px;
-
-    @media (max-width: $breakpoint-lg) {
-      position: static;
-    }
-  }
-
-  &__image-principale {
-    border-radius: $rayon-bordure-lg;
-    overflow: hidden;
-    height: 380px;
-    border: 1.5px solid $couleur-bordure;
-    background-color: $couleur-fond-alt;
-    cursor: zoom-in;
-    position: relative;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    &:hover img {
-      transform: scale(1.04);
-    }
-  }
-
-  // Hint zoom — apparaît au hover
-  &__zoom-hint {
-    position: absolute;
-    bottom: 0.85rem;
-    right: 0.85rem;
-    background-color: rgba(0, 0, 0, 0.55);
-    color: $couleur-blanc;
-    font-size: 0.78rem;
-    font-weight: 500;
-    padding: 0.3rem 0.7rem;
-    border-radius: $rayon-pill;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.2s, transform 0.2s;
-    pointer-events: none;
-  }
-
-  &__image-principale:hover &__zoom-hint {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  // Modal zoom
-  &__zoom-modal {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.88);
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    cursor: zoom-out;
-    animation: fadeInModal 0.2s ease;
-  }
-
-  &__zoom-modal-inner {
-    position: relative;
-    max-width: 900px;
-    width: 100%;
-    border-radius: $rayon-bordure-lg;
-    overflow: hidden;
-    cursor: default;
-    animation: scaleInModal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-
-    img {
-      width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
-      display: block;
-    }
-  }
-
-  &__zoom-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.5);
-    color: $couleur-blanc;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
-    z-index: 1;
-
-    &:hover {
-      background-color: rgba(0,0,0,0.8);
-    }
-  }
-
-  // Infos texte
-  &__categorie {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: $couleur-accent;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-
-  &__nom {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $couleur-texte;
-    margin-bottom: 1rem;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-  }
-
-  &__dispo {
-    margin-bottom: 1.75rem;
-  }
-
-  &__prix-bloc {
-    background-color: $couleur-fond-alt;
-    border-radius: $rayon-bordure;
-    padding: 1rem 1.3rem;
-    margin-bottom: 1.75rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    border: 1.5px solid $couleur-bordure;
-  }
-
-  &__prix {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $couleur-texte;
-    letter-spacing: -0.04em;
-  }
-
-  &__prix-label {
-    font-size: 0.85rem;
-    color: $couleur-texte-clair;
-  }
-
-  &__description {
-    color: $couleur-texte-clair;
-    line-height: 1.7;
-    margin-bottom: 2rem;
-    font-size: 0.93rem;
-  }
-
-  &__section-titre {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: $couleur-texte-subtil;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    margin-bottom: 0.85rem;
-  }
-
-  // Specs — apparaissent en cascade quand la page est visible
-  &__specs-grille {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-    margin-bottom: 2rem;
-  }
-
-  &__spec-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.87rem;
-    color: $couleur-texte;
-    background-color: $couleur-fond-alt;
-    padding: 0.6rem 0.9rem;
-    border-radius: $rayon-bordure;
-    font-weight: 500;
-    border: 1.5px solid $couleur-bordure;
-    transition: border-color 0.2s, transform 0.2s;
-
-    &:hover {
-      border-color: darken($couleur-bordure, 8%);
-      transform: translateX(2px);
-    }
-
-    // Cascade via --si
-    &--anime {
-      opacity: 0;
-      animation: none;
-    }
-  }
-
-  &--visible &__spec-item--anime {
-    animation: specEntree 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-    animation-delay: calc(0.3s + var(--si) * 0.08s);
-  }
-
-  &__spec-icone {
-    color: $couleur-texte-clair;
-    flex-shrink: 0;
-  }
-
-  // Équipements — cascade
-  &__options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 2rem;
-  }
-
-  &__option {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.87rem;
-    font-weight: 500;
-    padding: 0.1rem 0;
-
-    &--ok  { color: $couleur-succes; }
-    &--non { color: $couleur-texte-subtil; }
-
-    &--anime {
-      opacity: 0;
-      animation: none;
-    }
-  }
-
-  &--visible &__option--anime {
-    animation: optionEntree 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
-    animation-delay: calc(0.5s + var(--oi) * 0.07s);
-  }
-
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-
-    .btn {
-      transition: background 0.15s, transform 0.2s, opacity 0.15s;
-
-      &:hover:not(:disabled) { transform: translateY(-2px); }
-      &:active:not(:disabled) { transform: translateY(0); }
-    }
+  @media (max-width: $bp-lg) {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 2rem 0 4rem;
   }
 }
 
-// Keyframes modal
+// ── Colonne gauche — galerie sticky ───────────────────────────
+.fiche-vehicule__colonne-gauche {
+  position: sticky;
+  top: 90px;
+  padding-right: 3.5rem;
+  padding-top: 0;
+
+  @media (max-width: $bp-lg) {
+    position: static;
+    padding-right: 0;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.fiche-vehicule__filigrane {
+  font-family: $serif;
+  font-size: clamp(8rem, 16vw, 14rem);
+  font-weight: 700;
+  color: rgba($texte-clair-fond, 0.04);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  top: -1rem;
+  left: -0.5rem;
+  z-index: 0;
+
+  @media (max-width: $bp-md) {
+    font-size: 6rem;
+  }
+}
+
+.fiche-vehicule__galerie-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+// ── Colonne droite — contenu scrollable ───────────────────────
+.fiche-vehicule__colonne-droite {
+  padding-left: 3.5rem;
+  border-left: 1px solid $bordure-clair;
+
+  @media (max-width: $bp-lg) {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid $bordure-clair;
+    padding-top: 2.5rem;
+  }
+}
+
+// En-tête véhicule
+.fiche-vehicule__header-contenu {
+  margin-bottom: 2.5rem;
+}
+
+.fiche-vehicule__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.fiche-vehicule__categorie-tag {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: $or;
+  font-weight: 700;
+}
+
+.fiche-vehicule__nom {
+  font-family: $serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: $texte-clair-fond;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 1.1rem;
+}
+
+.fiche-vehicule__description {
+  font-size: 0.9rem;
+  color: $texte-secondaire;
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+// ── Prix ──────────────────────────────────────────────────────
+.fiche-vehicule__prix-bloc {
+  margin-bottom: 2.5rem;
+}
+
+.fiche-vehicule__prix-inner {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.fiche-vehicule__prix {
+  font-family: $serif;
+  font-size: clamp(2.6rem, 5vw, 3.4rem);
+  font-weight: 700;
+  color: $texte-clair-fond;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.fiche-vehicule__prix-label {
+  font-size: 0.85rem;
+  color: $texte-secondaire;
+  font-weight: 400;
+}
+
+.fiche-vehicule__prix-note {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba($texte-clair-fond, 0.3);
+  font-weight: 500;
+}
+
+// ── Séparateur or ─────────────────────────────────────────────
+.fiche-vehicule__separateur {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba($or, 0.4) 0%, rgba($or, 0.1) 60%, transparent 100%);
+  margin: 2.5rem 0;
+}
+
+// ── Tableau specs éditorial ───────────────────────────────────
+.fiche-vehicule__section-titre {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba($texte-clair-fond, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 1.25rem;
+}
+
+.fiche-vehicule__specs-section {
+  margin-bottom: 0;
+}
+
+.fiche-vehicule__specs-tableau {
+  display: flex;
+  flex-direction: column;
+}
+
+.fiche-vehicule__spec-ligne {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid $bordure-clair;
+  font-size: 0.85rem;
+
+  &:first-child { border-top: 1px solid $bordure-clair; }
+
+  .fiche-vehicule--visible & {
+    animation: specEntree 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(0.1s + var(--si) * 0.07s);
+  }
+}
+
+.fiche-vehicule__spec-icone {
+  color: $or;
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fiche-vehicule__spec-label {
+  color: $texte-secondaire;
+  font-weight: 400;
+  flex: 1;
+}
+
+.fiche-vehicule__spec-valeur {
+  font-weight: 600;
+  color: $texte-clair-fond;
+  text-transform: capitalize;
+}
+
+// ── Équipements ───────────────────────────────────────────────
+.fiche-vehicule__equip-section {
+  margin-bottom: 0;
+}
+
+.fiche-vehicule__equip-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fiche-vehicule__equip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.87rem;
+  font-weight: 500;
+  padding: 0.1rem 0;
+
+  .fiche-vehicule--visible & {
+    animation: specEntree 0.38s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(0.2s + var(--oi) * 0.07s);
+  }
+
+  &--ok {
+    color: $texte-clair-fond;
+    .fiche-vehicule__equip-check { color: $succes; }
+  }
+
+  &--non {
+    color: #b8b4b0;
+    .fiche-vehicule__equip-check { color: #c8c4c0; }
+  }
+}
+
+.fiche-vehicule__equip-check {
+  flex-shrink: 0;
+}
+
+.fiche-vehicule__equip-icone {
+  color: $or;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+// ── Actions ───────────────────────────────────────────────────
+.fiche-vehicule__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.fiche-vehicule__cta {
+  width: 100%;
+  justify-content: center;
+}
+
+.fiche-vehicule__lien-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $texte-secondaire;
+  transition: color 0.2s, gap 0.2s;
+
+  &:hover {
+    color: $texte-clair-fond;
+    gap: 0.55rem;
+  }
+}
+
+// ── Visible state ─────────────────────────────────────────────
+.fiche-vehicule--visible {
+  .fiche-vehicule__header-contenu,
+  .fiche-vehicule__prix-bloc,
+  .fiche-vehicule__specs-section,
+  .fiche-vehicule__equip-section,
+  .fiche-vehicule__actions {
+    animation: ficheEntree 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .fiche-vehicule__prix-bloc { animation-delay: 0.08s; }
+  .fiche-vehicule__specs-section { animation-delay: 0.14s; }
+  .fiche-vehicule__equip-section { animation-delay: 0.2s; }
+  .fiche-vehicule__actions { animation-delay: 0.26s; }
+}
+
+// ── Keyframes modal (lightbox) ────────────────────────────────
 @keyframes fadeInModal {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
 @keyframes scaleInModal {
-  from { transform: scale(0.92); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }

@@ -182,34 +182,6 @@ function Calendrier({ dateDebut, dateFin, onChange }) {
         <div className="calendrier__instruction">{instruction}</div>
       )}
 
-      {/* Résumé dates sélectionnées */}
-      {(dateDebut || dateFin) && (
-        <div className="calendrier__resume-dates">
-          <div className={`calendrier__date-pill${dateDebut ? ' calendrier__date-pill--actif' : ''}`}>
-            <span className="calendrier__date-pill-label">Départ</span>
-            <span className="calendrier__date-pill-valeur">
-              {dateDebut
-                ? dateDebut.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-                : '—'}
-            </span>
-          </div>
-          <div className="calendrier__date-separateur">→</div>
-          <div className={`calendrier__date-pill${dateFin ? ' calendrier__date-pill--actif' : ''}`}>
-            <span className="calendrier__date-pill-label">Retour</span>
-            <span className="calendrier__date-pill-valeur">
-              {dateFin
-                ? dateFin.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-                : '—'}
-            </span>
-          </div>
-          {dateDebut && dateFin && (
-            <div className="calendrier__nb-jours">
-              {Math.ceil((dateFin - dateDebut) / (1000 * 60 * 60 * 24))} jour{Math.ceil((dateFin - dateDebut) / (1000 * 60 * 60 * 24)) > 1 ? 's' : ''}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Navigation mois — sur mobile : titre centré avec flèches de chaque côté */}
       <div className="calendrier__nav">
         <button
@@ -276,6 +248,34 @@ function Calendrier({ dateDebut, dateFin, onChange }) {
       {/* Hint swipe sur mobile */}
       {estMobile && (
         <div className="calendrier__hint-swipe">← Glissez pour changer de mois →</div>
+      )}
+
+      {/* Résumé dates sélectionnées */}
+      {(dateDebut || dateFin) && (
+        <div className="calendrier__resume-dates">
+          <div className={`calendrier__date-pill${dateDebut ? ' calendrier__date-pill--actif' : ''}`}>
+            <span className="calendrier__date-pill-label">Départ</span>
+            <span className="calendrier__date-pill-valeur">
+              {dateDebut
+                ? dateDebut.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+                : '—'}
+            </span>
+          </div>
+          <div className="calendrier__date-separateur">→</div>
+          <div className={`calendrier__date-pill${dateFin ? ' calendrier__date-pill--actif' : ''}`}>
+            <span className="calendrier__date-pill-label">Retour</span>
+            <span className="calendrier__date-pill-valeur">
+              {dateFin
+                ? dateFin.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+                : '—'}
+            </span>
+          </div>
+          {dateDebut && dateFin && (
+            <div className="calendrier__nb-jours">
+              {Math.ceil((dateFin - dateDebut) / (1000 * 60 * 60 * 24))} jour{Math.ceil((dateFin - dateDebut) / (1000 * 60 * 60 * 24)) > 1 ? 's' : ''}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Reset */}

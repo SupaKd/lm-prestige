@@ -1,91 +1,129 @@
-// Footer — fond noir dense, sobre
+// ═══════════════════════════════════════════════════════════════
+// FOOTER — Ultra sombre, editorial, trait or en séparateur
+// ═══════════════════════════════════════════════════════════════
+
 .footer {
-  background-color: $couleur-fond-sombre;
-  color: rgba($couleur-blanc, 0.55);
-  padding: 3.5rem 0 2rem;
-  margin-top: 5rem;
-  border-top: 1px solid rgba($couleur-blanc, 0.06);
+  background-color: $noir;
+  color: rgba($blanc-casse, 0.5);
+  padding: 5rem 0 2.5rem;
+  border-top: 1px solid $noir-bordure;
+
+  // Trait or en haut
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, $or, transparent);
+  }
 
   &__grille {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
+    gap: 4rem;
+    margin-bottom: 4rem;
 
-    @media (max-width: $breakpoint-md) {
+    @media (max-width: $bp-md) {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 2.5rem;
     }
   }
 
   &__logo {
-    font-size: 1.1rem;
+    font-family: $serif;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: $couleur-blanc;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.03em;
+    color: $blanc-casse;
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
 
-    span {
-      color: $couleur-accent;
-    }
+    span { color: $or; }
   }
 
   &__description {
     font-size: 0.85rem;
-    line-height: 1.7;
-    margin-bottom: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 1.75rem;
+    max-width: 280px;
   }
 
   &__titre-col {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    color: rgba($couleur-blanc, 0.3);
+    color: rgba($blanc-casse, 0.25);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 1.25rem;
   }
 
   &__liste {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   &__lien {
-    font-size: 0.88rem;
-    transition: color 0.15s;
+    font-size: 0.85rem;
+    transition: color 0.18s;
     cursor: pointer;
+    color: rgba($blanc-casse, 0.5);
 
-    &:hover {
-      color: $couleur-blanc;
-    }
-  }
-
-  &__bas {
-    border-top: 1px solid rgba($couleur-blanc, 0.07);
-    padding-top: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.8rem;
-
-    @media (max-width: $breakpoint-md) {
-      flex-direction: column;
-      gap: 0.5rem;
-      text-align: center;
-    }
+    &:hover { color: $or; }
   }
 
   &__contact {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.5rem;
     font-size: 0.85rem;
   }
 
   &__contact-item {
     display: flex;
     align-items: center;
+    gap: 0.6rem;
+    transition: color 0.18s;
+
+    &:hover { color: $or; }
+  }
+
+  // Bas du footer
+  &__bas {
+    border-top: 1px solid rgba($blanc-casse, 0.06);
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+
+    @media (max-width: $bp-md) {
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: center;
+    }
+  }
+
+  // Mention or subtile
+  &__mention-or {
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
+    color: rgba($or, 0.5);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    &::before, &::after {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background-color: rgba($or, 0.3);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, User, MapPin, CheckCircle, ChevronUp, ChevronDown } from 'lucide-react'
+import { ArrowLeft, User, MapPin, CheckCircle, ChevronUp, ChevronDown, Calendar } from 'lucide-react'
 import { vehicules, lieux } from '../data/data'
 import Calendrier from '../components/ui/Calendrier'
 import { useToast } from '../components/ui/Toast'
@@ -13,8 +13,11 @@ function Reservation() {
   const { prefill } = usePrefill()
 
   const [etape, setEtape] = useState(1)
-  const [dates, setDates] = useState({ dateDebut: null, dateFin: null })
-  const [form, setForm] = useState({ lieu: '', nom: '', prenom: '', telephone: '', email: '' })
+  const [dates, setDates] = useState({
+    dateDebut: prefill.dateDebut ?? null,
+    dateFin:   prefill.dateFin   ?? null,
+  })
+  const [form, setForm] = useState({ lieu: prefill.lieu ?? '', nom: '', prenom: '', telephone: '', email: '' })
   const [erreurs, setErreurs] = useState({})
   const [envoi, setEnvoi] = useState(false)
   const [bottomSheetOuverte, setBottomSheetOuverte] = useState(false)
@@ -22,20 +25,10 @@ function Reservation() {
 
   const vehicule = vehicules.find((v) => v.id === parseInt(id))
 
-  // Pré-remplissage depuis le widget hero
-  useEffect(() => {
-    if (prefill.dateDebut || prefill.dateFin) {
-      setDates({ dateDebut: prefill.dateDebut, dateFin: prefill.dateFin })
-    }
-    if (prefill.lieu) {
-      setForm((prev) => ({ ...prev, lieu: prefill.lieu }))
-    }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
   useEffect(() => {
     const el = pageRef.current
     if (!el) return
-    requestAnimationFrame(() => el.classList.add('reservation--visible'))
+    requestAnimationFrame(() => el.classList.add('resa-page--visible'))
   }, [])
 
   if (!vehicule) {
@@ -111,230 +104,228 @@ function Reservation() {
   }
 
   return (
-    <main className="page">
-      <div className="conteneur">
-        <section className="reservation" ref={pageRef}>
+    <main className="page resa-page" ref={pageRef} style={{ background: '#F8F6F2' }}>
 
-          {/* Header */}
-          <div className="reservation__header">
-            <button
-              onClick={() => etape === 2 ? setEtape(1) : navigate(-1)}
-              className="btn btn--secondaire"
-              style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
-            >
-              <ArrowLeft size={14} /> {etape === 2 ? 'Étape précédente' : 'Retour'}
-            </button>
-            <h1 className="titre-section" style={{ marginTop: '1rem' }}>
-              Réserver — <span>{vehicule.nom}</span>
-            </h1>
+      {/* ── Split layout ── */}
+      <div className="resa-split">
+
+        {/* ── Colonne gauche — photo sticky ── */}
+        <div className="resa-gauche">
+          <div className="resa-gauche__photo-wrap">
+            <img src={vehicule.images[0]} alt={vehicule.nom} className="resa-gauche__photo" />
+            <div className="resa-gauche__overlay" />
+          </div>
+
+          {/* Retour en haut */}
+          <button
+            onClick={() => etape === 2 ? setEtape(1) : navigate(-1)}
+            className="resa-gauche__retour"
+          >
+            <ArrowLeft size={14} /> {etape === 2 ? 'Étape précédente' : 'Retour'}
+          </button>
+
+          {/* Infos véhicule en bas */}
+          <div className="resa-gauche__infos">
+            <div className="resa-gauche__categorie">{vehicule.categorie}</div>
+            <h2 className="resa-gauche__nom">{vehicule.nom}</h2>
+            <div className="resa-gauche__separateur" />
+            <div className="resa-gauche__prix-wrap">
+              <span className="resa-gauche__prix">{vehicule.prix_jour}€</span>
+              <span className="resa-gauche__prix-label">/ jour · TTC</span>
+            </div>
+            {total > 0 && (
+              <div className="resa-gauche__total">
+                <span>{nbJours} jour{nbJours > 1 ? 's' : ''}</span>
+                <span className="resa-gauche__total-montant">{total}€ total</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── Colonne droite — formulaire ── */}
+        <div className="resa-droite">
+          {/* En-tête mobile — nom + prix */}
+          <div className="resa-mobile-header">
+            <span className="resa-mobile-header__nom">{vehicule.nom}</span>
+            <span className="resa-mobile-header__prix">
+              {vehicule.prix_jour}€ <span>/ jour</span>
+            </span>
+          </div>
+          <div className="resa-droite__inner">
 
             {/* Stepper */}
-            <div className="reservation__stepper">
-              {[1, 2].map((n) => (
-                <div
-                  key={n}
-                  className={`reservation__step${etape >= n ? ' reservation__step--actif' : ''}${etape > n ? ' reservation__step--fait' : ''}`}
-                >
-                  <div className="reservation__step-cercle">
-                    {etape > n ? <CheckCircle size={14} /> : n}
-                  </div>
-                  <span>{n === 1 ? 'Dates & lieu' : 'Vos infos'}</span>
+            <div className="resa-stepper">
+              <div className={`resa-stepper__etape${etape >= 1 ? ' resa-stepper__etape--actif' : ''}${etape > 1 ? ' resa-stepper__etape--fait' : ''}`}>
+                <div className="resa-stepper__cercle">
+                  {etape > 1 ? <CheckCircle size={13} /> : 1}
                 </div>
-              ))}
-              <div className="reservation__step-ligne">
-                <div className="reservation__step-ligne-inner" style={{ width: etape > 1 ? '100%' : '0%' }} />
+                <span className="resa-stepper__label">Dates & lieu</span>
+              </div>
+
+              <div className="resa-stepper__ligne">
+                <div className="resa-stepper__ligne-inner" style={{ width: etape > 1 ? '100%' : '0%' }} />
+              </div>
+
+              <div className={`resa-stepper__etape${etape >= 2 ? ' resa-stepper__etape--actif' : ''}`}>
+                <div className="resa-stepper__cercle">
+                  {etape > 2 ? <CheckCircle size={13} /> : 2}
+                </div>
+                <span className="resa-stepper__label">Vos informations</span>
               </div>
             </div>
-          </div>
 
-          <div className="reservation__grille">
+            {/* ── Étape 1 ── */}
             <form onSubmit={soumettre} noValidate>
-              <div className="reservation__formulaire">
+              <div className={`resa-panel${etape === 1 ? ' resa-panel--actif' : ''}`}>
+                <h1 className="resa-droite__titre">
+                  <span className="resa-droite__titre-num">01</span>
+                  Choisissez vos dates
+                </h1>
 
-                {/* ── Étape 1 : Calendrier + lieu ── */}
-                <div className={`reservation__etape-panel${etape === 1 ? ' reservation__etape-panel--actif' : ''}`}>
-                  <h2 className="reservation__etape-titre" data-num="1">
-                    Choisissez vos dates
-                  </h2>
+                <Calendrier
+                  dateDebut={dateDebut}
+                  dateFin={dateFin}
+                  onChange={(val) => {
+                    setDates(val)
+                    if (erreurs.dates) setErreurs((prev) => ({ ...prev, dates: '' }))
+                  }}
+                />
+                {erreurs.dates && <p className="resa-erreur">{erreurs.dates}</p>}
 
-                  <Calendrier
-                    dateDebut={dateDebut}
-                    dateFin={dateFin}
-                    onChange={(val) => {
-                      setDates(val)
-                      if (erreurs.dates) setErreurs((prev) => ({ ...prev, dates: '' }))
-                    }}
+                <div className="resa-groupe" style={{ marginTop: '2rem' }}>
+                  <label className="resa-label" htmlFor="lieu">
+                    <MapPin size={12} /> Lieu de prise en charge
+                  </label>
+                  <select
+                    id="lieu" name="lieu" value={form.lieu} onChange={changerChamp}
+                    className={`resa-select${erreurs.lieu ? ' resa-input--erreur' : ''}`}
+                  >
+                    <option value="">Sélectionner un lieu</option>
+                    {lieux.map((l) => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                  {erreurs.lieu && <p className="resa-erreur">{erreurs.lieu}</p>}
+                </div>
+
+                <button
+                  type="button"
+                  className="btn btn--primaire resa-submit"
+                  onClick={passerEtape2}
+                  disabled={!dateDebut || !dateFin}
+                >
+                  <Calendar size={15} /> Continuer
+                </button>
+              </div>
+
+              {/* ── Étape 2 ── */}
+              <div className={`resa-panel${etape === 2 ? ' resa-panel--actif' : ''}`}>
+                <h1 className="resa-droite__titre">
+                  <span className="resa-droite__titre-num">02</span>
+                  Vos informations
+                </h1>
+
+                <div className="resa-ligne">
+                  <div className="resa-groupe">
+                    <label className="resa-label" htmlFor="nom">Nom</label>
+                    <input
+                      type="text" id="nom" name="nom" value={form.nom}
+                      onChange={changerChamp} placeholder="Dupont"
+                      className={`resa-input${erreurs.nom ? ' resa-input--erreur' : ''}`}
+                    />
+                    {erreurs.nom && <p className="resa-erreur">{erreurs.nom}</p>}
+                  </div>
+                  <div className="resa-groupe">
+                    <label className="resa-label" htmlFor="prenom">Prénom</label>
+                    <input
+                      type="text" id="prenom" name="prenom" value={form.prenom}
+                      onChange={changerChamp} placeholder="Jean"
+                      className={`resa-input${erreurs.prenom ? ' resa-input--erreur' : ''}`}
+                    />
+                    {erreurs.prenom && <p className="resa-erreur">{erreurs.prenom}</p>}
+                  </div>
+                </div>
+
+                <div className="resa-groupe">
+                  <label className="resa-label" htmlFor="telephone">Téléphone</label>
+                  <input
+                    type="tel" id="telephone" name="telephone" value={form.telephone}
+                    onChange={changerChamp} placeholder="+33 6 XX XX XX XX"
+                    className={`resa-input${erreurs.telephone ? ' resa-input--erreur' : ''}`}
                   />
-
-                  {erreurs.dates && (
-                    <div className="reservation__erreur" style={{ marginTop: '0.5rem' }}>
-                      {erreurs.dates}
-                    </div>
-                  )}
-
-                  {/* Lieu de prise en charge */}
-                  <div className="reservation__groupe" style={{ marginTop: '2rem' }}>
-                    <label htmlFor="lieu">
-                      <MapPin size={12} style={{ verticalAlign: 'middle' }} /> Lieu de prise en charge *
-                    </label>
-                    <select
-                      id="lieu" name="lieu" value={form.lieu} onChange={changerChamp}
-                      className={erreurs.lieu ? 'input--erreur' : ''}
-                    >
-                      <option value="">Sélectionner un lieu</option>
-                      {lieux.map((l) => <option key={l} value={l}>{l}</option>)}
-                    </select>
-                    {erreurs.lieu && <span className="reservation__erreur">{erreurs.lieu}</span>}
-                  </div>
-
-                  <button
-                    type="button"
-                    className="btn btn--primaire reservation__submit"
-                    onClick={passerEtape2}
-                    disabled={!dateDebut || !dateFin}
-                  >
-                    Continuer →
-                  </button>
+                  {erreurs.telephone && <p className="resa-erreur">{erreurs.telephone}</p>}
                 </div>
 
-                {/* ── Étape 2 : Infos client ── */}
-                <div className={`reservation__etape-panel${etape === 2 ? ' reservation__etape-panel--actif' : ''}`}>
-                  <h2 className="reservation__etape-titre" data-num="2">
-                    <User size={15} /> Vos informations
-                  </h2>
-
-                  <div className="reservation__ligne">
-                    <div className="reservation__groupe">
-                      <label htmlFor="nom">Nom *</label>
-                      <input type="text" id="nom" name="nom" value={form.nom}
-                        onChange={changerChamp} placeholder="Dupont"
-                        className={erreurs.nom ? 'input--erreur' : ''}
-                      />
-                      {erreurs.nom && <span className="reservation__erreur">{erreurs.nom}</span>}
-                    </div>
-                    <div className="reservation__groupe">
-                      <label htmlFor="prenom">Prénom *</label>
-                      <input type="text" id="prenom" name="prenom" value={form.prenom}
-                        onChange={changerChamp} placeholder="Jean"
-                        className={erreurs.prenom ? 'input--erreur' : ''}
-                      />
-                      {erreurs.prenom && <span className="reservation__erreur">{erreurs.prenom}</span>}
-                    </div>
-                  </div>
-
-                  <div className="reservation__groupe">
-                    <label htmlFor="telephone">Téléphone *</label>
-                    <input type="tel" id="telephone" name="telephone" value={form.telephone}
-                      onChange={changerChamp} placeholder="+33 6 XX XX XX XX"
-                      className={erreurs.telephone ? 'input--erreur' : ''}
-                    />
-                    {erreurs.telephone && <span className="reservation__erreur">{erreurs.telephone}</span>}
-                  </div>
-
-                  <div className="reservation__groupe">
-                    <label htmlFor="email">Email *</label>
-                    <input type="email" id="email" name="email" value={form.email}
-                      onChange={changerChamp} placeholder="jean.dupont@email.com"
-                      className={erreurs.email ? 'input--erreur' : ''}
-                    />
-                    {erreurs.email && <span className="reservation__erreur">{erreurs.email}</span>}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className={`btn btn--primaire reservation__submit${envoi ? ' reservation__submit--loading' : ''}`}
-                    disabled={envoi}
-                  >
-                    {envoi ? <span className="reservation__spinner" /> : 'Confirmer la réservation →'}
-                  </button>
+                <div className="resa-groupe">
+                  <label className="resa-label" htmlFor="email">Email</label>
+                  <input
+                    type="email" id="email" name="email" value={form.email}
+                    onChange={changerChamp} placeholder="jean.dupont@email.com"
+                    className={`resa-input${erreurs.email ? ' resa-input--erreur' : ''}`}
+                  />
+                  {erreurs.email && <p className="resa-erreur">{erreurs.email}</p>}
                 </div>
 
+                {/* Récap compact avant confirmation */}
+                <div className="resa-recap">
+                  <div className="resa-recap__ligne">
+                    <span>Départ</span>
+                    <span>{dateDebut?.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  </div>
+                  <div className="resa-recap__ligne">
+                    <span>Retour</span>
+                    <span>{dateFin?.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  </div>
+                  <div className="resa-recap__ligne">
+                    <span>Lieu</span>
+                    <span>{form.lieu}</span>
+                  </div>
+                  <div className="resa-recap__ligne resa-recap__ligne--total">
+                    <span>Total estimé</span>
+                    <span>{total}€</span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className={`btn btn--primaire resa-submit${envoi ? ' resa-submit--loading' : ''}`}
+                  disabled={envoi}
+                >
+                  {envoi ? <span className="resa-spinner" /> : <><CheckCircle size={15} /> Confirmer la réservation</>}
+                </button>
               </div>
             </form>
-
-            {/* Résumé latéral — desktop uniquement */}
-            <aside className="reservation__resume reservation__resume--desktop">
-              <div className="reservation__resume-image">
-                <img src={vehicule.images[0]} alt={vehicule.nom} />
-              </div>
-              <div className="reservation__resume-contenu">
-                <div className="reservation__resume-vehicule">{vehicule.nom}</div>
-                <div className="reservation__resume-ligne">
-                  <span>Tarif</span>
-                  <span>{vehicule.prix_jour}€ / jour</span>
-                </div>
-                <div className="reservation__resume-ligne">
-                  <span>Départ</span>
-                  <span className={dateDebut ? 'reservation__resume-valeur--actif' : ''}>
-                    {dateDebut ? dateDebut.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
-                  </span>
-                </div>
-                <div className="reservation__resume-ligne">
-                  <span>Retour</span>
-                  <span className={dateFin ? 'reservation__resume-valeur--actif' : ''}>
-                    {dateFin ? dateFin.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
-                  </span>
-                </div>
-                <div className="reservation__resume-ligne">
-                  <span>Durée</span>
-                  <span className={nbJours > 0 ? 'reservation__resume-valeur--actif' : ''}>
-                    {nbJours > 0 ? `${nbJours} jour${nbJours > 1 ? 's' : ''}` : '—'}
-                  </span>
-                </div>
-                <div className="reservation__resume-ligne">
-                  <span>Lieu</span>
-                  <span className={form.lieu ? 'reservation__resume-valeur--actif' : ''}>
-                    {form.lieu || '—'}
-                  </span>
-                </div>
-                <div className="reservation__resume-total">
-                  <span className="label">Total estimé</span>
-                  <span className={`montant${total > 0 ? ' montant--actif' : ''}`}>
-                    {total > 0 ? `${total}€` : '—'}
-                  </span>
-                </div>
-              </div>
-            </aside>
           </div>
-
-        </section>
+        </div>
       </div>
 
-      {/* ── Bottom sheet résumé — mobile uniquement ── */}
-      <div className={`reservation__bottom-sheet${bottomSheetOuverte ? ' reservation__bottom-sheet--ouverte' : ''}`}>
-        {/* Handle + toggle */}
+      {/* ── Bottom sheet mobile ── */}
+      <div className={`resa-bottom-sheet${bottomSheetOuverte ? ' resa-bottom-sheet--ouverte' : ''}`}>
         <button
           type="button"
-          className="reservation__bottom-sheet-handle"
+          className="resa-bottom-sheet__handle"
           onClick={() => setBottomSheetOuverte((v) => !v)}
-          aria-label={bottomSheetOuverte ? 'Réduire le résumé' : 'Voir le résumé'}
+          aria-label={bottomSheetOuverte ? 'Réduire' : 'Voir le résumé'}
         >
-          <div className="reservation__bottom-sheet-pill" />
-          <div className="reservation__bottom-sheet-header">
-            <span className="reservation__bottom-sheet-titre">{vehicule.nom}</span>
-            <span className={`reservation__bottom-sheet-total${total > 0 ? ' reservation__bottom-sheet-total--actif' : ''}`}>
+          <div className="resa-bottom-sheet__pill" />
+          <div className="resa-bottom-sheet__header">
+            <span className="resa-bottom-sheet__nom">{vehicule.nom}</span>
+            <span className={`resa-bottom-sheet__total${total > 0 ? ' resa-bottom-sheet__total--actif' : ''}`}>
               {total > 0 ? `${total}€` : `${vehicule.prix_jour}€/j`}
             </span>
-            {bottomSheetOuverte ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+            {bottomSheetOuverte ? <ChevronDown size={15} /> : <ChevronUp size={15} />}
           </div>
         </button>
-
-        {/* Contenu dépliable */}
-        <div className="reservation__bottom-sheet-corps">
-          <div className="reservation__bottom-sheet-lignes">
-            {[
-              { label: 'Tarif',  valeur: `${vehicule.prix_jour}€ / jour`, actif: true },
-              { label: 'Départ', valeur: dateDebut ? dateDebut.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '—', actif: !!dateDebut },
-              { label: 'Retour', valeur: dateFin   ? dateFin.toLocaleDateString('fr-FR',   { day: 'numeric', month: 'short' }) : '—', actif: !!dateFin },
-              { label: 'Durée',  valeur: nbJours > 0 ? `${nbJours} j` : '—', actif: nbJours > 0 },
-              { label: 'Lieu',   valeur: form.lieu || '—', actif: !!form.lieu },
-            ].map(({ label, valeur, actif }) => (
-              <div key={label} className="reservation__bottom-sheet-ligne">
-                <span>{label}</span>
-                <span className={actif ? 'reservation__resume-valeur--actif' : ''}>{valeur}</span>
-              </div>
-            ))}
-          </div>
+        <div className="resa-bottom-sheet__corps">
+          {[
+            { label: 'Tarif',  val: `${vehicule.prix_jour}€ / jour` },
+            { label: 'Départ', val: dateDebut ? dateDebut.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '—' },
+            { label: 'Retour', val: dateFin   ? dateFin.toLocaleDateString('fr-FR',   { day: 'numeric', month: 'short' }) : '—' },
+            { label: 'Durée',  val: nbJours > 0 ? `${nbJours} jour${nbJours > 1 ? 's' : ''}` : '—' },
+            { label: 'Lieu',   val: form.lieu || '—' },
+          ].map(({ label, val }) => (
+            <div key={label} className="resa-bottom-sheet__ligne">
+              <span>{label}</span><span>{val}</span>
+            </div>
+          ))}
         </div>
       </div>
     </main>

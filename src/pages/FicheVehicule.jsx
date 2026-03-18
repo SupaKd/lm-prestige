@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   ArrowLeft, Users, Fuel, Settings, Gauge, Thermometer,
-  Navigation, Bluetooth, CheckCircle, XCircle, Calendar
+  Navigation, Bluetooth, CheckCircle, XCircle, Calendar, ArrowRight
 } from 'lucide-react'
 import { vehicules } from '../data/data'
 import Galerie from '../components/ui/Galerie'
@@ -13,8 +13,8 @@ function FicheVehicule() {
   const pageRef = useRef(null)
 
   const vehicule = vehicules.find((v) => v.id === parseInt(id))
+  const index = vehicules.findIndex((v) => v.id === parseInt(id))
 
-  // Anime l'entrée de la page
   useEffect(() => {
     const el = pageRef.current
     if (!el) return
@@ -40,10 +40,10 @@ function FicheVehicule() {
   const { nom, categorie, prix_jour, places, transmission, carburant, disponible, images, description, caracteristiques } = vehicule
 
   const specs = [
-    { icone: <Users size={15} />, label: `${places} places` },
-    { icone: <Settings size={15} />, label: transmission },
-    { icone: <Fuel size={15} />, label: carburant },
-    { icone: <Gauge size={15} />, label: caracteristiques.puissance },
+    { icone: <Users size={14} />, label: 'Places', valeur: `${places}` },
+    { icone: <Settings size={14} />, label: 'Transmission', valeur: transmission },
+    { icone: <Fuel size={14} />, label: 'Carburant', valeur: carburant },
+    { icone: <Gauge size={14} />, label: 'Puissance', valeur: caracteristiques.puissance },
   ]
 
   const equipements = [
@@ -52,93 +52,136 @@ function FicheVehicule() {
     { icone: <Bluetooth size={14} />, label: 'Bluetooth', ok: caracteristiques.bluetooth },
   ]
 
-  return (
-    <main className="page">
-      <div className="conteneur">
-        <section className="fiche-vehicule" ref={pageRef}>
-          {/* Retour */}
-          <div className="fiche-vehicule__retour">
-            <button
-              onClick={() => navigate(-1)}
-              className="btn btn--secondaire"
-              style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
-            >
-              <ArrowLeft size={14} /> Retour
-            </button>
-          </div>
+  const numeroFiche = String(index + 1).padStart(2, '0')
 
-          <div className="fiche-vehicule__grille">
-            {/* Galerie */}
-            <div className="fiche-vehicule__galerie fiche-vehicule__bloc">
-              <Galerie images={images} nom={nom} />
+  return (
+    <main className="page fiche-page" style={{ background: '#F8F6F2' }}>
+      <div className="fiche-vehicule" ref={pageRef}>
+
+        {/* ── Header éditorial ── */}
+        <div className="fiche-vehicule__entete">
+          <div className="conteneur">
+            <div className="fiche-vehicule__entete-inner">
+              <button
+                onClick={() => navigate(-1)}
+                className="fiche-vehicule__retour-btn"
+              >
+                <ArrowLeft size={14} /> Catalogue
+              </button>
+              <span className="fiche-vehicule__breadcrumb">
+                {categorie} · #{numeroFiche}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Split layout ── */}
+        <div className="conteneur">
+          <div className="fiche-vehicule__split">
+
+            {/* ── Colonne gauche — galerie sticky ── */}
+            <div className="fiche-vehicule__colonne-gauche">
+              <div className="fiche-vehicule__galerie-wrap">
+                {/* Filigrane numéro en arrière-plan */}
+                <div className="fiche-vehicule__filigrane">{numeroFiche}</div>
+                <Galerie images={images} nom={nom} />
+              </div>
             </div>
 
-            {/* Infos */}
-            <div className="fiche-vehicule__infos fiche-vehicule__bloc" style={{ '--delay': '0.1s' }}>
-              <div className="fiche-vehicule__categorie">{categorie}</div>
-              <h1 className="fiche-vehicule__nom">{nom}</h1>
+            {/* ── Colonne droite — contenu scrollable ── */}
+            <div className="fiche-vehicule__colonne-droite">
 
-              <div className="fiche-vehicule__dispo">
-                <span className={`badge badge--${disponible ? 'disponible' : 'indisponible'}`}>
-                  {disponible ? 'Disponible à la location' : 'Actuellement indisponible'}
-                </span>
+              {/* En-tête véhicule */}
+              <div className="fiche-vehicule__header-contenu">
+                <div className="fiche-vehicule__meta">
+                  <span className="fiche-vehicule__categorie-tag">{categorie}</span>
+                  <span className={`badge badge--${disponible ? 'disponible' : 'indisponible'}`}>
+                    {disponible ? 'Disponible' : 'Indisponible'}
+                  </span>
+                </div>
+                <h1 className="fiche-vehicule__nom">{nom}</h1>
+                <p className="fiche-vehicule__description">{description}</p>
               </div>
 
+              {/* Prix */}
               <div className="fiche-vehicule__prix-bloc">
-                <span className="fiche-vehicule__prix">{prix_jour}€</span>
-                <span className="fiche-vehicule__prix-label">par jour · TTC</span>
+                <div className="fiche-vehicule__prix-inner">
+                  <span className="fiche-vehicule__prix">{prix_jour}€</span>
+                  <span className="fiche-vehicule__prix-label">/ jour · TTC</span>
+                </div>
+                <div className="fiche-vehicule__prix-note">
+                  Sans franchise · Assurance incluse
+                </div>
               </div>
 
-              <p className="fiche-vehicule__description">{description}</p>
+              {/* Séparateur or */}
+              <div className="fiche-vehicule__separateur" />
 
-              {/* Specs en cascade */}
-              <h3 className="fiche-vehicule__section-titre">Caractéristiques</h3>
-              <div className="fiche-vehicule__specs-grille">
-                {specs.map((s, i) => (
-                  <div
-                    key={i}
-                    className="fiche-vehicule__spec-item fiche-vehicule__spec-item--anime"
-                    style={{ '--si': i }}
-                  >
-                    <span className="fiche-vehicule__spec-icone">{s.icone}</span>
-                    {s.label}
-                  </div>
-                ))}
+              {/* Tableau specs éditorial */}
+              <div className="fiche-vehicule__specs-section">
+                <h3 className="fiche-vehicule__section-titre">Caractéristiques</h3>
+                <div className="fiche-vehicule__specs-tableau">
+                  {specs.map((s, i) => (
+                    <div key={i} className="fiche-vehicule__spec-ligne" style={{ '--si': i }}>
+                      <span className="fiche-vehicule__spec-icone">{s.icone}</span>
+                      <span className="fiche-vehicule__spec-label">{s.label}</span>
+                      <span className="fiche-vehicule__spec-valeur">{s.valeur}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Équipements en cascade */}
-              <h3 className="fiche-vehicule__section-titre">Équipements</h3>
-              <div className="fiche-vehicule__options">
-                {equipements.map((eq, i) => (
-                  <div
-                    key={i}
-                    className={`fiche-vehicule__option fiche-vehicule__option--${eq.ok ? 'ok' : 'non'} fiche-vehicule__option--anime`}
-                    style={{ '--oi': i }}
-                  >
-                    {eq.ok ? <CheckCircle size={15} /> : <XCircle size={15} />}
-                    {eq.icone} {eq.label}
-                  </div>
-                ))}
+              {/* Séparateur or */}
+              <div className="fiche-vehicule__separateur" />
+
+              {/* Équipements */}
+              <div className="fiche-vehicule__equip-section">
+                <h3 className="fiche-vehicule__section-titre">Équipements</h3>
+                <div className="fiche-vehicule__equip-liste">
+                  {equipements.map((eq, i) => (
+                    <div
+                      key={i}
+                      className={`fiche-vehicule__equip-item fiche-vehicule__equip-item--${eq.ok ? 'ok' : 'non'}`}
+                      style={{ '--oi': i }}
+                    >
+                      <span className="fiche-vehicule__equip-check">
+                        {eq.ok ? <CheckCircle size={14} /> : <XCircle size={14} />}
+                      </span>
+                      <span className="fiche-vehicule__equip-icone">{eq.icone}</span>
+                      {eq.label}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Actions */}
+              {/* Séparateur or */}
+              <div className="fiche-vehicule__separateur" />
+
+              {/* CTA */}
               <div className="fiche-vehicule__actions">
                 {disponible ? (
-                  <Link to={`/reservation/${vehicule.id}`} className="btn btn--primaire btn--grand">
-                    <Calendar size={17} /> Réserver ce véhicule
+                  <Link
+                    to={`/reservation/${vehicule.id}`}
+                    className="btn btn--primaire btn--grand fiche-vehicule__cta"
+                  >
+                    <Calendar size={16} /> Réserver ce véhicule
                   </Link>
                 ) : (
-                  <button className="btn btn--primaire btn--grand" disabled style={{ opacity: 0.4, cursor: 'not-allowed' }}>
+                  <button
+                    className="btn btn--primaire btn--grand fiche-vehicule__cta"
+                    disabled
+                    style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                  >
                     Véhicule indisponible
                   </button>
                 )}
-                <Link to="/catalogue" className="btn btn--secondaire">
-                  Voir d&apos;autres véhicules
+                <Link to="/catalogue" className="fiche-vehicule__lien-retour">
+                  Voir d&apos;autres véhicules <ArrowRight size={13} />
                 </Link>
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </main>
   )
